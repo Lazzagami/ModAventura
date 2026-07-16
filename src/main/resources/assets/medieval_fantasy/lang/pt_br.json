@@ -1,0 +1,9 @@
+{
+  "entity.medieval_fantasy.cavaleiro_das_cinzas": "Cavaleiro das Cinzas",
+  "item.medieval_fantasy.cavaleiro_das_cinzas_spawn_egg": "Ovo de Invocação do Cavaleiro das Cinzas",
+  "item.medieval_fantasy.eternal_fire_blade": "Lâmina do Incêndio Eterno",
+  "item.medieval_fantasy.medieval_sword": "Espada Medieval",
+  "death.attack.relic_overheat": "%1$s foi consumido pelo superaquecimento da relíquia",
+  "key.categories.medieval_fantasy": "Medieval Fantasy",
+  "key.medieval_fantasy.open_attributes": "Abrir Atributos"
+}

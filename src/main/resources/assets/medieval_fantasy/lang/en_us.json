@@ -1,0 +1,9 @@
+{
+  "entity.medieval_fantasy.cavaleiro_das_cinzas": "Ashen Knight",
+  "item.medieval_fantasy.cavaleiro_das_cinzas_spawn_egg": "Ashen Knight Spawn Egg",
+  "item.medieval_fantasy.eternal_fire_blade": "Eternal Fire Blade",
+  "item.medieval_fantasy.medieval_sword": "Medieval Sword",
+  "death.attack.relic_overheat": "%1$s was consumed by relic overheating",
+  "key.categories.medieval_fantasy": "Medieval Fantasy",
+  "key.medieval_fantasy.open_attributes": "Open Attributes"
+}

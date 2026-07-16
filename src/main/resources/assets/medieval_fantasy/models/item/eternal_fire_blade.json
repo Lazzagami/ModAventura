@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "medieval_fantasy:item/eternal_fire_blade"
+  }
+}
