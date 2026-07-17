@@ -24,6 +24,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -257,6 +258,10 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         return entityData.get(FIGHT_STARTED);
     }
 
+    public boolean canStartDialogueClient() {
+        return !isFightStartedClientSafe() && getBossAnimation() != ANIMATION_DEATH_KNEEL;
+    }
+
     private void setFightStarted(boolean started) {
         fightStarted = started;
         entityData.set(FIGHT_STARTED, started);
@@ -306,15 +311,12 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
 
         LivingEntity target = getTarget();
         if (!fightStarted) {
-            if (target != null && target.isAlive()) {
-                tickEntrance(target);
-                return;
+            if (target != null) {
+                setTarget(null);
+                setLastHurtByMob(null);
             }
-
-            if (dialogueStarted || dialogueMode) {
-                tickPassiveDialogue();
-                return;
-            }
+            tickPassiveDialogue();
+            return;
         }
 
         updatePhase();
@@ -655,6 +657,44 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
     @Override
     public boolean shouldDropExperience() {
         return true;
+    }
+
+    @Override
+    protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (hand != InteractionHand.MAIN_HAND || deathSequenceStarted) {
+            return super.mobInteract(player, hand);
+        }
+
+        if (fightStarted || isFightStartedClientSafe()) {
+            return super.mobInteract(player, hand);
+        }
+
+        if (level().isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+
+        if (player instanceof ServerPlayer serverPlayer) {
+            startIntroDialogue(serverPlayer);
+        }
+        return InteractionResult.CONSUME;
+    }
+
+    private void startIntroDialogue(ServerPlayer player) {
+        if (fightStarted || deathSequenceStarted || dialogueMode) {
+            return;
+        }
+
+        dialogueStarted = true;
+        introLine = true;
+        introTicks = Math.max(introTicks, 40);
+        setTarget(null);
+        setLastHurtByMob(null);
+        getNavigation().stop();
+        getLookControl().setLookAt(player, 40.0F, 40.0F);
+        lookAt(player, 40.0F, 40.0F);
+
+        String startNode = DialogueMemory.getBoolean(player, "ash_knight_defeated") ? "skip_prompt" : "start";
+        DialogueManager.startDialogue(player, this, "ash_knight_intro", startNode);
     }
 
     private void tickEntrance(LivingEntity target) {
