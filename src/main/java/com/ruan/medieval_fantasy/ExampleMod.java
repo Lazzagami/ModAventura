@@ -31,6 +31,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import com.ruan.medieval_fantasy.combat.heat.network.HeatNetworkHandler;
+import com.ruan.medieval_fantasy.dialogue.network.DialogueNetworkHandler;
 import com.ruan.medieval_fantasy.entity.ModEntities;
 import com.ruan.medieval_fantasy.entity.client.CavaleiroDasCinzasRenderer;
 import com.ruan.medieval_fantasy.entity.custom.CavaleiroDasCinzas;
@@ -105,6 +106,7 @@ public class ExampleMod
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         HeatNetworkHandler.register();
+        DialogueNetworkHandler.register();
         ExperienceNetworkHandler.register();
         ScalingNetworkHandler.register();
         SpecializationNetworkHandler.register();

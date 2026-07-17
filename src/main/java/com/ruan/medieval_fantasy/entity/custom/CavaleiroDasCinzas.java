@@ -2,6 +2,8 @@ package com.ruan.medieval_fantasy.entity.custom;
 
 import com.ruan.medieval_fantasy.combat.effect.EternalFireEffect;
 import com.ruan.medieval_fantasy.combat.heat.HeatManager;
+import com.ruan.medieval_fantasy.dialogue.DialogueManager;
+import com.ruan.medieval_fantasy.dialogue.DialogueMemory;
 import com.ruan.medieval_fantasy.item.ModItems;
 import com.ruan.medieval_fantasy.progression.experience.CombatParticipationTracker;
 import com.ruan.medieval_fantasy.progression.experience.PlayerExperienceManager;
@@ -161,6 +163,8 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
     private boolean chargeAfterWater;
     private boolean chargeDamageDone;
     private boolean fightStarted;
+    private boolean dialogueStarted;
+    private boolean dialogueMode;
     private boolean deathSequenceStarted;
     private boolean relicDropped;
     private boolean finalPhaseHealingUsed;
@@ -301,9 +305,16 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         spawnAtmosphere();
 
         LivingEntity target = getTarget();
-        if (!fightStarted && target != null && target.isAlive()) {
-            tickEntrance(target);
-            return;
+        if (!fightStarted) {
+            if (target != null && target.isAlive()) {
+                tickEntrance(target);
+                return;
+            }
+
+            if (dialogueStarted || dialogueMode) {
+                tickPassiveDialogue();
+                return;
+            }
         }
 
         updatePhase();
@@ -314,12 +325,26 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
             spawnCombatParticles();
             return;
         }
+
         tickCombatMemory(target);
         tickCommanderMovement();
         tickAbilities();
         tickArenaPressure();
         clearBlockingBlocks();
         spawnCombatParticles();
+    }
+
+    private void tickPassiveDialogue() {
+        getNavigation().stop();
+        setTarget(null);
+        setLastHurtByMob(null);
+        setDeltaMovement(getDeltaMovement().multiply(0.10D, 1.0D, 0.10D));
+        if (tickCount % 55 == 0) {
+            playBreathSound();
+        }
+        if (dialogueMode && getBossAnimation() == ANIMATION_IDLE && tickCount % 80 == 0) {
+            startBossAnimation(ANIMATION_GUARD_OBSERVE, 28);
+        }
     }
 
     @Override
@@ -520,6 +545,8 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("intro_line", introLine);
         tag.putBoolean("fight_started", fightStarted);
+        tag.putBoolean("dialogue_started", dialogueStarted);
+        tag.putBoolean("dialogue_mode", dialogueMode);
         tag.putBoolean("first_eternal_fire_line", firstEternalFireLine);
         tag.putBoolean("phase_two_line", phaseTwoLine);
         tag.putBoolean("final_phase_line", finalPhaseLine);
@@ -559,6 +586,8 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         super.readAdditionalSaveData(tag);
         introLine = tag.getBoolean("intro_line");
         setFightStarted(tag.getBoolean("fight_started"));
+        dialogueStarted = tag.getBoolean("dialogue_started");
+        dialogueMode = tag.getBoolean("dialogue_mode");
         firstEternalFireLine = tag.getBoolean("first_eternal_fire_line");
         phaseTwoLine = tag.getBoolean("phase_two_line");
         finalPhaseLine = tag.getBoolean("final_phase_line");
@@ -643,20 +672,22 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
             playBreathSound();
         }
 
-        if (introTicks == 40 && !introLine) {
+        if (dialogueMode) {
+            if (introTicks % 30 == 0) {
+                startBossAnimation(ANIMATION_GUARD_OBSERVE, 26);
+            }
+            return;
+        }
+
+        if (dialogueStarted) {
+            return;
+        }
+
+        if (introTicks >= 40 && target instanceof ServerPlayer player) {
+            dialogueStarted = true;
             introLine = true;
-            sayToNearbyPlayers("Mais um busca o poder das cinzas...");
-        }
-
-        if (introTicks == 65) {
-            playSwordDrawSound();
-            startBossAnimation(ANIMATION_DRAW_SWORD, 42);
-        }
-
-        if (introTicks >= 108) {
-            BossScalingManager.applyOnce(this, 350.0D, 16.0D);
-            setFightStarted(true);
-            combatRecoveryTicks = 6;
+            String startNode = DialogueMemory.getBoolean(player, "ash_knight_defeated") ? "skip_prompt" : "start";
+            DialogueManager.startDialogue(player, this, "ash_knight_intro", startNode);
         }
     }
 
@@ -749,7 +780,62 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         if (source.getEntity() instanceof ServerPlayer player) {
             CombatParticipationTracker.recordDamage(this, player);
         }
+        for (ServerPlayer player : CombatParticipationTracker.getParticipants(this)) {
+            DialogueMemory.setBoolean(player, "ash_knight_defeated", true);
+            DialogueMemory.setBoolean(player, "ash_knight_intro_seen", true);
+        }
         PlayerExperienceManager.rewardBossKill(this, CombatParticipationTracker.getParticipants(this), "cavaleiro_das_cinzas");
+    }
+
+    public void setDialogueMode(boolean dialogueMode) {
+        this.dialogueMode = dialogueMode;
+        if (dialogueMode) {
+            setTarget(null);
+            setLastHurtByMob(null);
+            getNavigation().stop();
+            combatRecoveryTicks = 9999;
+            basicAttackCooldown = 9999;
+            chargeAttackTicks = 0;
+            leapImpactTicks = 0;
+        } else if (!fightStarted) {
+            combatRecoveryTicks = 0;
+            basicAttackCooldown = 0;
+        }
+    }
+
+    public void beginCombatAfterDialogue(ServerPlayer player) {
+        dialogueMode = false;
+        dialogueStarted = true;
+        BossScalingManager.applyOnce(this, 350.0D, 16.0D);
+        setFightStarted(true);
+        combatRecoveryTicks = 10;
+        basicAttackCooldown = 12;
+        if (player != null && player.isAlive()) {
+            setTarget(player);
+            setLastHurtByMob(player);
+            getLookControl().setLookAt(player, 45.0F, 45.0F);
+            lookAt(player, 45.0F, 45.0F);
+        }
+        if (getBossAnimation() == ANIMATION_IDLE) {
+            playSwordDrawSound();
+            startBossAnimation(ANIMATION_DRAW_SWORD, 42);
+        }
+    }
+
+    public void playDialogueAnimation(String animation, int durationTicks) {
+        int duration = durationTicks <= 0 ? 35 : durationTicks;
+        int animationId = switch (animation == null ? "" : animation) {
+            case "draw_sword" -> ANIMATION_DRAW_SWORD;
+            case "turn_to_player", "sword_rest", "look_player" -> ANIMATION_GUARD_OBSERVE;
+            case "phase_transition" -> ANIMATION_PHASE_TRANSITION;
+            case "death_kneel" -> ANIMATION_DEATH_KNEEL;
+            default -> ANIMATION_GUARD_OBSERVE;
+        };
+
+        if (animationId == ANIMATION_DRAW_SWORD) {
+            playSwordDrawSound();
+        }
+        startBossAnimation(animationId, duration);
     }
 
     private void tickDeathSequence() {
