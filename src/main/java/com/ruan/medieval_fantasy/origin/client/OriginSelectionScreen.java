@@ -37,15 +37,16 @@ public class OriginSelectionScreen extends Screen {
         graphics.drawCenteredString(font, "Escolha sua Origem", width / 2, 26, titleColor);
         graphics.drawCenteredString(font, "Esta escolha sera permanente e acompanhara sua campanha.", width / 2, 42, 0xFFD6C8B8);
 
-        int cardWidth = Math.min(190, (width - 80) / 3);
-        int cardHeight = 150;
-        int totalWidth = cardWidth * origins.size() + 12 * (origins.size() - 1);
+        int spacing = 12;
+        int cardWidth = Math.min(300, (width - 64 - spacing * (origins.size() - 1)) / origins.size());
+        int cardHeight = Math.min(230, Math.max(172, height - 150));
+        int totalWidth = cardWidth * origins.size() + spacing * (origins.size() - 1);
         int startX = (width - totalWidth) / 2;
         int y = 72;
 
         for (int i = 0; i < origins.size(); i++) {
             OriginData data = origins.get(i);
-            int x = startX + i * (cardWidth + 12);
+            int x = startX + i * (cardWidth + spacing);
             renderCard(graphics, data, x, y, cardWidth, cardHeight, mouseX, mouseY);
         }
 
@@ -78,29 +79,35 @@ public class OriginSelectionScreen extends Screen {
         graphics.fill(x, y, x + w, y + h, fill);
         graphics.fill(x, y, x + w, y + 22, 0xAA5A250E);
         graphics.drawCenteredString(font, data.getDisplayName(), x + w / 2, y + 7, 0xFFFFD28A);
-        graphics.drawCenteredString(font, data.getSubtitle(), x + w / 2, y + 30, 0xFFE5D1BE);
-        graphics.drawWordWrap(font, Component.literal(data.getDescription()), x + 10, y + 48, w - 20, 0xFFD6C8B8);
+        int textWidth = w - 20;
+        graphics.drawWordWrap(font, Component.literal(data.getSubtitle()), x + 10, y + 30, textWidth, 0xFFE5D1BE);
 
-        int traitY = y + 92;
+        int descriptionY = y + 52;
+        graphics.drawWordWrap(font, Component.literal(data.getDescription()), x + 10, descriptionY, textWidth, 0xFFD6C8B8);
+        int descriptionLines = Math.max(1, font.split(Component.literal(data.getDescription()), textWidth).size());
+        int traitY = descriptionY + descriptionLines * 10 + 10;
         for (String trait : data.getTraits()) {
-            graphics.drawString(font, "- " + trait, x + 10, traitY, 0xFFC8B6A2, false);
-            traitY += 12;
-            if (traitY > y + h - 12) {
+            String traitText = "- " + trait;
+            int traitLines = Math.max(1, font.split(Component.literal(traitText), textWidth).size());
+            if (traitY + traitLines * 10 > y + h - 8) {
                 break;
             }
+            graphics.drawWordWrap(font, Component.literal(traitText), x + 10, traitY, textWidth, 0xFFC8B6A2);
+            traitY += traitLines * 10 + 3;
         }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        int cardWidth = Math.min(190, (width - 80) / 3);
-        int cardHeight = 150;
-        int totalWidth = cardWidth * origins.size() + 12 * (origins.size() - 1);
+        int spacing = 12;
+        int cardWidth = Math.min(300, (width - 64 - spacing * (origins.size() - 1)) / origins.size());
+        int cardHeight = Math.min(230, Math.max(172, height - 150));
+        int totalWidth = cardWidth * origins.size() + spacing * (origins.size() - 1);
         int startX = (width - totalWidth) / 2;
         int y = 72;
 
         for (int i = 0; i < origins.size(); i++) {
-            int x = startX + i * (cardWidth + 12);
+            int x = startX + i * (cardWidth + spacing);
             if (isInside((int) mouseX, (int) mouseY, x, y, cardWidth, cardHeight)) {
                 selected = origins.get(i).getType();
                 return true;

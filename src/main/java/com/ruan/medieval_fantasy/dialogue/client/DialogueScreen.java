@@ -77,22 +77,19 @@ public class DialogueScreen extends Screen {
         }
 
         List<OptionSlot> options = visibleOptions(node);
+        List<DialogueOption> visibleDialogueOptions = options.stream().map(OptionSlot::option).toList();
+        int clickedOption = DialogueRenderer.getClickedOption(font, node.getText(), visibleDialogueOptions,
+                (int) mouseX, (int) mouseY, width, height);
         if (options.isEmpty()) {
-            DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, -1);
+            if (clickedOption == -1) {
+                DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, -1);
+            }
             return true;
         }
 
-        int boxWidth = Math.min(width - 48, 430);
-        int x = (width - boxWidth) / 2;
-        int y = height - 118 - 28;
-        int startY = y + 76;
-
-        for (int i = 0; i < options.size(); i++) {
-            int optionY = startY + i * 17;
-            if (DialogueRenderer.isInside((int) mouseX, (int) mouseY, x + 12, optionY - 3, boxWidth - 24, 15)) {
-                DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, options.get(i).originalIndex());
-                return true;
-            }
+        if (clickedOption >= 0 && clickedOption < options.size()) {
+            DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, options.get(clickedOption).originalIndex());
+            return true;
         }
 
         return true;
