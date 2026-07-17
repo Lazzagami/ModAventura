@@ -140,6 +140,8 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
     private int lastBasicAttackAnimation = ANIMATION_VERTICAL_SLASH;
     private int waterCampTicks;
     private int waterPunishCooldown;
+    private int siegePressureTicks;
+    private int siegeLeapCooldown;
     private int confidence = 50;
     private int feintCooldown;
     private int opportunityCooldown;
@@ -338,6 +340,13 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
             return false;
         }
 
+        LivingEntity responsibleAttacker = getResponsibleLivingAttacker(source);
+        Entity directAttacker = source.getDirectEntity();
+        if (shouldPerfectGuardIncomingDamage(responsibleAttacker, directAttacker)) {
+            guardIncomingAttack(responsibleAttacker, directAttacker, true);
+            return false;
+        }
+
         if (EternalFireEffect.isFireDamage(source)) {
             return false;
         }
@@ -376,6 +385,77 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
             startBossAnimation(amount >= 8.0F ? ANIMATION_STAGGER : ANIMATION_HURT, amount >= 8.0F ? 16 : 9);
         }
         return hurt;
+    }
+
+    private LivingEntity getResponsibleLivingAttacker(DamageSource source) {
+        if (source.getEntity() instanceof LivingEntity living) {
+            return living;
+        }
+
+        if (source.getDirectEntity() instanceof Projectile projectile && projectile.getOwner() instanceof LivingEntity living) {
+            return living;
+        }
+
+        return null;
+    }
+
+    private boolean shouldPerfectGuardIncomingDamage(LivingEntity attacker, Entity directAttacker) {
+        if (attacker == null || attacker == this || deathSequenceStarted) {
+            return false;
+        }
+
+        boolean projectile = directAttacker instanceof Projectile;
+        boolean playerDriven = attacker instanceof Player;
+        if (!playerDriven) {
+            return false;
+        }
+
+        if (!fightStarted) {
+            return true;
+        }
+
+        if (!projectile) {
+            return false;
+        }
+
+        return isDistantOrHighThreat(attacker) || siegePressureTicks > 20;
+    }
+
+    private void guardIncomingAttack(LivingEntity attacker, Entity directAttacker, boolean perfectGuard) {
+        if (attacker != null) {
+            setTarget(attacker);
+            setLastHurtByMob(attacker);
+            getNavigation().stop();
+            getLookControl().setLookAt(attacker, 45.0F, 45.0F);
+            lookAt(attacker, 45.0F, 45.0F);
+        }
+
+        if (!fightStarted) {
+            introTicks = Math.max(introTicks, 1);
+        }
+
+        projectileMemory = Math.min(200, projectileMemory + (perfectGuard ? 14 : 6));
+        siegePressureTicks = Math.min(20 * 16, siegePressureTicks + (perfectGuard ? 18 : 8));
+        combatStyle = CombatStyle.GUARDIAN;
+        confidence = clampConfidence(confidence + 4);
+        projectileBlockCooldown = Math.max(projectileBlockCooldown, perfectGuard ? 8 : 5);
+        startBossAnimation(ANIMATION_PROJECTILE_BLOCK, 19);
+        playSound(SoundEvents.SHIELD_BLOCK, 1.0F, perfectGuard ? 0.42F : 0.55F);
+        playSound(SoundEvents.ANVIL_HIT, perfectGuard ? 0.55F : 0.35F, 0.66F);
+        spawnGuardSparks();
+
+        if (directAttacker instanceof Projectile projectile && projectile.isAlive()) {
+            if (level() instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(ParticleTypes.CRIT, projectile.getX(), projectile.getY(), projectile.getZ(), 10, 0.18D, 0.18D, 0.18D, 0.10D);
+            }
+            projectile.discard();
+        }
+    }
+
+    private boolean isDistantOrHighThreat(LivingEntity attacker) {
+        double horizontalDistanceSqr = new Vec3(attacker.getX() - getX(), 0.0D, attacker.getZ() - getZ()).lengthSqr();
+        double heightDifference = attacker.getY() - getY();
+        return horizontalDistanceSqr > 100.0D || heightDifference > 4.5D || (heightDifference > 2.5D && horizontalDistanceSqr > 36.0D);
     }
 
     @Override
@@ -470,6 +550,8 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         tag.putInt("last_basic_attack_animation", lastBasicAttackAnimation);
         tag.putInt("water_camp_ticks", waterCampTicks);
         tag.putInt("water_punish_cooldown", waterPunishCooldown);
+        tag.putInt("siege_pressure_ticks", siegePressureTicks);
+        tag.putInt("siege_leap_cooldown", siegeLeapCooldown);
     }
 
     @Override
@@ -508,6 +590,8 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
                 : ANIMATION_VERTICAL_SLASH;
         waterCampTicks = tag.getInt("water_camp_ticks");
         waterPunishCooldown = tag.getInt("water_punish_cooldown");
+        siegePressureTicks = tag.getInt("siege_pressure_ticks");
+        siegeLeapCooldown = tag.getInt("siege_leap_cooldown");
         if (tag.contains("combat_style")) {
             try {
                 combatStyle = CombatStyle.valueOf(tag.getString("combat_style"));
@@ -743,6 +827,10 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
             waterPunishCooldown--;
         }
 
+        if (siegeLeapCooldown > 0) {
+            siegeLeapCooldown--;
+        }
+
         if (blockCounterAttackTicks > 0) {
             blockCounterAttackTicks--;
             if (blockCounterAttackTicks == 0 && target.distanceToSqr(this) <= 18.0D && combatRecoveryTicks <= 0) {
@@ -814,6 +902,10 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         }
 
         double distance = distanceTo(target);
+        if (trySiegeApproach(target, distance)) {
+            return;
+        }
+
         if (tryObserveAndGuardAtRange(target, distance)) {
             return;
         }
@@ -889,6 +981,8 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         }
 
         double distance = distanceTo(target);
+        updateSiegePressure(target, distance);
+
         if (distance < 2.6D) {
             closeRangeTicks++;
             farRangeTicks = Math.max(0, farRangeTicks - 2);
@@ -947,6 +1041,22 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         lastTargetX = target.getX();
         lastTargetZ = target.getZ();
         hasLastTargetPosition = true;
+    }
+
+    private void updateSiegePressure(LivingEntity target, double distance) {
+        double heightDifference = target.getY() - getY();
+        boolean highGround = heightDifference > 4.5D;
+        boolean farAndThreatening = distance > 11.0D && (projectileMemory > 8 || passivePressureTicks > 20 * 6);
+        boolean lineBlocked = !getSensing().hasLineOfSight(target);
+
+        if (highGround || farAndThreatening || (lineBlocked && distance > 7.0D)) {
+            siegePressureTicks = Math.min(20 * 18, siegePressureTicks + (highGround ? 4 : 2));
+            combatStyle = CombatStyle.GUARDIAN;
+        } else if (distance < 5.0D && heightDifference < 2.5D) {
+            siegePressureTicks = Math.max(0, siegePressureTicks - 5);
+        } else {
+            siegePressureTicks = Math.max(0, siegePressureTicks - 1);
+        }
     }
 
     private void chooseCombatStyle() {
@@ -1084,6 +1194,51 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
             observationTicks = 0;
             chargeAt(target);
             chargeCooldown = Math.max(80, CHARGE_COOLDOWN - (isPhaseTwo() ? 45 : 0));
+        }
+
+        return true;
+    }
+
+    private boolean trySiegeApproach(LivingEntity target, double distance) {
+        if (!fightStarted || deathSequenceStarted || target.isInWater() || chargeAttackTicks > 0 || leapImpactTicks > 0) {
+            return false;
+        }
+
+        double heightDifference = target.getY() - getY();
+        boolean highGround = heightDifference > 4.5D;
+        boolean farArcher = distance > 11.0D && projectileMemory > 10;
+        boolean lineBlocked = !getSensing().hasLineOfSight(target) && distance > 7.0D;
+        if (!highGround && !farArcher && !lineBlocked && siegePressureTicks < 20 * 5) {
+            return false;
+        }
+
+        getNavigation().stop();
+        getLookControl().setLookAt(target, 45.0F, 45.0F);
+        lookAt(target, 45.0F, 45.0F);
+
+        if (level() instanceof ServerLevel serverLevel && tickCount % 6 == 0) {
+            serverLevel.sendParticles(ParticleTypes.ASH, getX(), getY() + 1.4D, getZ(), 8, 0.7D, 0.5D, 0.7D, 0.018D);
+            serverLevel.sendParticles(ParticleTypes.SMOKE, getX(), getY() + 0.6D, getZ(), 5, 0.45D, 0.25D, 0.45D, 0.012D);
+        }
+
+        if (getBossAnimation() == ANIMATION_IDLE && tickCount % 18 == 0) {
+            startBossAnimation(ANIMATION_GUARD_OBSERVE, 24);
+            playSound(SoundEvents.SHIELD_BLOCK, 0.45F, 0.52F);
+        }
+
+        Vec3 toTarget = target.position().subtract(position());
+        Vec3 forward = horizontalOrLook(toTarget);
+        applyCommanderMovement(forward.scale(highGround ? 0.11D : 0.16D));
+
+        boolean shouldLeap = siegeLeapCooldown <= 0
+                && flameLeapCooldown <= 80
+                && siegePressureTicks >= (highGround ? 20 * 3 : 20 * 6)
+                && distance <= 24.0D;
+        if (shouldLeap) {
+            siegeLeapAt(target, highGround);
+            siegeLeapCooldown = highGround ? 20 * 5 : 20 * 7;
+            flameLeapCooldown = Math.max(flameLeapCooldown, 20 * 5);
+            siegePressureTicks = Math.max(20, siegePressureTicks / 2);
         }
 
         return true;
@@ -1431,22 +1586,32 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
             return false;
         }
 
-        Projectile projectile = findIncomingProjectile(target.isInWater() ? 12.0D : 8.0D);
+        boolean siegeThreat = isDistantOrHighThreat(target) || siegePressureTicks > 20;
+        Projectile projectile = findIncomingProjectile(target.isInWater() || siegeThreat ? 14.0D : 8.0D);
         if (projectile == null) {
             return false;
         }
 
         projectileMemory = Math.min(160, projectileMemory + 4);
-        float blockChance = target.isInWater()
-                ? (isCommittedToAction() ? 0.70F : 0.92F)
-                : (isCommittedToAction() ? 0.25F : 0.50F);
+        float blockChance;
+        if (siegeThreat) {
+            blockChance = 1.0F;
+        } else if (target.isInWater()) {
+            blockChance = isCommittedToAction() ? 0.70F : 0.92F;
+        } else {
+            blockChance = isCommittedToAction() ? 0.25F : 0.50F;
+        }
         if (random.nextFloat() > blockChance) {
             projectileBlockCooldown = target.isInWater() ? 4 : 8;
             return false;
         }
 
-        projectileBlockCooldown = target.isInWater() ? 10 : 20;
+        projectileBlockCooldown = siegeThreat ? 6 : target.isInWater() ? 10 : 20;
         observationTicks = 0;
+        if (siegeThreat) {
+            siegePressureTicks = Math.min(20 * 18, siegePressureTicks + 12);
+            combatStyle = CombatStyle.GUARDIAN;
+        }
         getNavigation().stop();
         lookAt(projectile, 45.0F, 45.0F);
         getLookControl().setLookAt(projectile, 45.0F, 45.0F);
@@ -1811,6 +1976,29 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         leapImpactTicks = 26;
         playSound(SoundEvents.BLAZE_SHOOT, 0.9F, 0.65F);
         playSound(SoundEvents.ARMOR_EQUIP_NETHERITE, 0.55F, 0.55F);
+    }
+
+    private void siegeLeapAt(LivingEntity target, boolean highGround) {
+        Vec3 toTarget = target.position().subtract(position());
+        Vec3 horizontal = horizontalOrLook(toTarget);
+        double horizontalDistance = Math.sqrt(new Vec3(toTarget.x, 0.0D, toTarget.z).lengthSqr());
+        double heightDifference = Math.max(0.0D, target.getY() - getY());
+        double horizontalSpeed = Math.min(1.25D, 0.72D + horizontalDistance * 0.035D);
+        double verticalSpeed = highGround ? Math.min(1.85D, 1.0D + heightDifference * 0.075D) : 0.95D;
+
+        startBossAnimation(ANIMATION_FLAME_LEAP, 34);
+        combatRecoveryTicks = 10;
+        leapImpactTicks = highGround ? 32 : 26;
+        setDeltaMovement(horizontal.x * horizontalSpeed, verticalSpeed, horizontal.z * horizontalSpeed);
+        hasImpulse = true;
+        playSound(SoundEvents.RAVAGER_ROAR, 0.75F, 0.48F);
+        playSound(SoundEvents.BLAZE_SHOOT, 1.0F, 0.55F);
+        playSound(SoundEvents.ANVIL_LAND, 0.7F, 0.55F);
+
+        if (level() instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(ParticleTypes.LARGE_SMOKE, getX(), getY() + 0.45D, getZ(), 22, 0.75D, 0.25D, 0.75D, 0.04D);
+            serverLevel.sendParticles(ParticleTypes.FLAME, getX(), getY() + 0.65D, getZ(), 28, 0.65D, 0.35D, 0.65D, 0.05D);
+        }
     }
 
     private void flameImpact() {
