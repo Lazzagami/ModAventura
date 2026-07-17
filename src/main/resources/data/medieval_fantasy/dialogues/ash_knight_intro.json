@@ -103,6 +103,44 @@
             { "type": "set_memory_string", "key": "ash_knight_first_answer_text", "value": "passing_through" },
             { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -1 }
           ]
+        },
+        {
+          "text": "[Cavaleiro] Conheco esse brasao.",
+          "next": "origin_knight_01",
+          "conditions": [
+            { "type": "origin", "value": "knight" }
+          ],
+          "actions": [
+            { "type": "set_memory_bool", "key": "ash_knight_used_origin_dialogue", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_origin_dialogue", "value": "knight_crest" },
+            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": 2 },
+            { "type": "add_memory_int", "key": "ash_knight_conviction", "amount": 1 }
+          ]
+        },
+        {
+          "text": "[Arqueologo] Essa armadura e do periodo da Guerra das Cinzas.",
+          "next": "origin_archaeologist_01",
+          "conditions": [
+            { "type": "origin", "value": "archaeologist" }
+          ],
+          "actions": [
+            { "type": "set_memory_bool", "key": "ash_knight_used_origin_dialogue", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_origin_dialogue", "value": "archaeologist_ash_war" },
+            { "type": "add_memory_int", "key": "ash_knight_compassion", "amount": 1 }
+          ]
+        },
+        {
+          "text": "[Renegado] Voce protege um trono vazio ha seculos?",
+          "next": "origin_renegade_01",
+          "conditions": [
+            { "type": "origin", "value": "renegade" }
+          ],
+          "actions": [
+            { "type": "set_memory_bool", "key": "ash_knight_used_origin_dialogue", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_origin_dialogue", "value": "renegade_empty_throne" },
+            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -1 },
+            { "type": "add_memory_int", "key": "ash_knight_ambition", "amount": 1 }
+          ]
         }
       ]
     },
@@ -520,6 +558,55 @@
       "text": "E exatamente isso que faco.",
       "animation": "sword_rest",
       "animationTicks": 44,
+      "next": "final_question_intro"
+    },
+
+    "origin_knight_01": {
+      "id": "origin_knight_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Entao ainda existem olhos capazes de ler um juramento antigo.",
+      "animation": "sword_rest",
+      "animationTicks": 50,
+      "next": "origin_knight_02"
+    },
+    "origin_knight_02": {
+      "id": "origin_knight_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Mas conhecer um brasao nao significa carregar seu peso.",
+      "animation": "sword_rest",
+      "animationTicks": 48,
+      "next": "final_question_intro"
+    },
+    "origin_archaeologist_01": {
+      "id": "origin_archaeologist_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Guerra das Cinzas...",
+      "animation": "sword_rest",
+      "animationTicks": 55,
+      "next": "origin_archaeologist_02"
+    },
+    "origin_archaeologist_02": {
+      "id": "origin_archaeologist_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Voces deram nome ao nosso fim para que ele coubesse em livros.",
+      "animation": "sword_rest",
+      "animationTicks": 52,
+      "next": "final_question_intro"
+    },
+    "origin_renegade_01": {
+      "id": "origin_renegade_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Vazio?",
+      "animation": "sword_rest",
+      "animationTicks": 45,
+      "next": "origin_renegade_02"
+    },
+    "origin_renegade_02": {
+      "id": "origin_renegade_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Um trono vazio ainda atrai os piores tipos de homens.",
+      "animation": "sword_rest",
+      "animationTicks": 50,
       "next": "final_question_intro"
     },
 

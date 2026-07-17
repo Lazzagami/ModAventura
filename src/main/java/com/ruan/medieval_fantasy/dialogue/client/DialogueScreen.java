@@ -58,7 +58,8 @@ public class DialogueScreen extends Screen {
         }
 
         String visibleText = node.getText().substring(0, Math.min(visibleCharacters, node.getText().length()));
-        DialogueRenderer.renderBox(graphics, font, node, visibleText, mouseX, mouseY, width, height, isTextComplete(node));
+        DialogueRenderer.renderBox(graphics, font, node, visibleText, mouseX, mouseY, width, height,
+                isTextComplete(node), visibleOptions(node).stream().map(OptionSlot::option).toList());
 
         super.render(graphics, mouseX, mouseY, partialTick);
     }
@@ -75,7 +76,7 @@ public class DialogueScreen extends Screen {
             return true;
         }
 
-        List<DialogueOption> options = node.getOptions();
+        List<OptionSlot> options = visibleOptions(node);
         if (options.isEmpty()) {
             DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, -1);
             return true;
@@ -89,7 +90,7 @@ public class DialogueScreen extends Screen {
         for (int i = 0; i < options.size(); i++) {
             int optionY = startY + i * 17;
             if (DialogueRenderer.isInside((int) mouseX, (int) mouseY, x + 12, optionY - 3, boxWidth - 24, 15)) {
-                DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, i);
+                DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, options.get(i).originalIndex());
                 return true;
             }
         }
@@ -102,8 +103,9 @@ public class DialogueScreen extends Screen {
         if (keyCode >= 49 && keyCode <= 57) {
             DialogueNode node = currentNode();
             int index = keyCode - 49;
-            if (node != null && isTextComplete(node) && index < node.getOptions().size()) {
-                DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, index);
+            List<OptionSlot> options = node == null ? List.of() : visibleOptions(node);
+            if (node != null && isTextComplete(node) && index < options.size()) {
+                DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, options.get(index).originalIndex());
                 return true;
             }
         }
@@ -118,4 +120,19 @@ public class DialogueScreen extends Screen {
         return visibleCharacters >= node.getText().length();
     }
 
+    private List<OptionSlot> visibleOptions(DialogueNode node) {
+        List<OptionSlot> visible = new java.util.ArrayList<>();
+        List<DialogueOption> options = node.getOptions();
+        for (int i = 0; i < options.size(); i++) {
+            DialogueOption option = options.get(i);
+            boolean available = option.getConditions().stream().allMatch(DialogueClientCondition::test);
+            if (available) {
+                visible.add(new OptionSlot(i, option));
+            }
+        }
+        return visible;
+    }
+
+    private record OptionSlot(int originalIndex, DialogueOption option) {
+    }
 }

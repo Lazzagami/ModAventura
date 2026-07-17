@@ -36,6 +36,7 @@ import com.ruan.medieval_fantasy.entity.ModEntities;
 import com.ruan.medieval_fantasy.entity.client.CavaleiroDasCinzasRenderer;
 import com.ruan.medieval_fantasy.entity.custom.CavaleiroDasCinzas;
 import com.ruan.medieval_fantasy.item.ModItems;
+import com.ruan.medieval_fantasy.origin.network.OriginNetworkHandler;
 import com.ruan.medieval_fantasy.progression.experience.network.ExperienceNetworkHandler;
 import com.ruan.medieval_fantasy.progression.specialization.network.SpecializationNetworkHandler;
 import com.ruan.medieval_fantasy.scaling.network.ScalingNetworkHandler;
@@ -107,6 +108,7 @@ public class ExampleMod
     {
         HeatNetworkHandler.register();
         DialogueNetworkHandler.register();
+        OriginNetworkHandler.register();
         ExperienceNetworkHandler.register();
         ScalingNetworkHandler.register();
         SpecializationNetworkHandler.register();

@@ -1,5 +1,6 @@
 package com.ruan.medieval_fantasy.dialogue;
 
+import com.ruan.medieval_fantasy.origin.OriginCondition;
 import net.minecraft.server.level.ServerPlayer;
 
 public class DialogueCondition {
@@ -10,6 +11,26 @@ public class DialogueCondition {
     private int amount;
     private boolean booleanValue;
 
+    public String getType() {
+        return type == null ? "" : type;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public boolean getBooleanValue() {
+        return booleanValue;
+    }
+
     public boolean test(ServerPlayer player) {
         String conditionType = type == null ? "" : type;
         return switch (conditionType) {
@@ -17,6 +38,9 @@ public class DialogueCondition {
             case "memory_int_at_least" -> DialogueMemory.getInt(player, key) >= amount;
             case "memory_int_below" -> DialogueMemory.getInt(player, key) < amount;
             case "memory_string" -> value != null && value.equals(DialogueMemory.getString(player, key));
+            case "origin" -> OriginCondition.hasOrigin(player, value);
+            case "origin_reputation_at_least" -> OriginCondition.reputationAtLeast(player, key, amount);
+            case "origin_reputation_below" -> OriginCondition.reputationBelow(player, key, amount);
             default -> true;
         };
     }

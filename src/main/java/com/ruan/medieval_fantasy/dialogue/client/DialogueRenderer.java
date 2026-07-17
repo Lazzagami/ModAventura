@@ -14,7 +14,8 @@ public final class DialogueRenderer {
     }
 
     public static void renderBox(GuiGraphics graphics, Font font, DialogueNode node, String visibleText,
-                                 int mouseX, int mouseY, int screenWidth, int screenHeight, boolean complete) {
+                                 int mouseX, int mouseY, int screenWidth, int screenHeight, boolean complete,
+                                 List<DialogueOption> visibleOptions) {
         int boxWidth = Math.min(screenWidth - 48, 430);
         int boxHeight = 118;
         int x = (screenWidth - boxWidth) / 2;
@@ -27,14 +28,13 @@ public final class DialogueRenderer {
         graphics.drawWordWrap(font, Component.literal(visibleText), x + 14, y + 34, boxWidth - 28, 0xFFE8DED2);
 
         if (complete) {
-            renderOptions(graphics, font, node, mouseX, mouseY, x, y, boxWidth);
+            renderOptions(graphics, font, visibleOptions, mouseX, mouseY, x, y, boxWidth);
         } else {
             graphics.drawString(font, "Clique para revelar", x + boxWidth - 105, y + boxHeight - 14, 0xFF9F8F84, false);
         }
     }
 
-    private static void renderOptions(GuiGraphics graphics, Font font, DialogueNode node, int mouseX, int mouseY, int x, int y, int boxWidth) {
-        List<DialogueOption> options = node.getOptions();
+    private static void renderOptions(GuiGraphics graphics, Font font, List<DialogueOption> options, int mouseX, int mouseY, int x, int y, int boxWidth) {
         if (options.isEmpty()) {
             int optionY = y + 92;
             int color = isInside(mouseX, mouseY, x + boxWidth - 96, optionY - 4, 86, 16) ? 0xFFFFD27D : 0xFFE8DED2;
