@@ -4,9 +4,14 @@ import com.ruan.medieval_fantasy.dialogue.DialogueNode;
 import com.ruan.medieval_fantasy.dialogue.DialogueOption;
 import com.ruan.medieval_fantasy.dialogue.DialogueTree;
 import com.ruan.medieval_fantasy.dialogue.network.DialogueNetworkHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -43,6 +48,7 @@ public class DialogueScreen extends Screen {
             return;
         }
 
+        lockCameraOnSpeaker();
         tickCounter++;
         if (tickCounter % 2 == 0 && visibleCharacters < node.getText().length()) {
             visibleCharacters++;
@@ -51,7 +57,6 @@ public class DialogueScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(graphics);
         DialogueNode node = currentNode();
         if (node == null) {
             return;
@@ -128,6 +133,35 @@ public class DialogueScreen extends Screen {
             }
         }
         return visible;
+    }
+
+    private void lockCameraOnSpeaker() {
+        Minecraft minecraft = Minecraft.getInstance();
+        Player player = minecraft.player;
+        if (player == null || minecraft.level == null) {
+            return;
+        }
+
+        Entity speaker = minecraft.level.getEntity(speakerEntityId);
+        if (speaker == null) {
+            return;
+        }
+
+        Vec3 from = player.getEyePosition();
+        Vec3 to = speaker.getEyePosition().add(0.0D, -0.15D, 0.0D);
+        Vec3 direction = to.subtract(from);
+        double horizontalDistance = Math.sqrt(direction.x * direction.x + direction.z * direction.z);
+
+        float targetYaw = (float) (Mth.atan2(direction.z, direction.x) * (180.0F / Math.PI)) - 90.0F;
+        float targetPitch = (float) (-(Mth.atan2(direction.y, horizontalDistance) * (180.0F / Math.PI)));
+
+        float yaw = Mth.rotLerp(0.28F, player.getYRot(), targetYaw);
+        float pitch = Mth.lerp(0.28F, player.getXRot(), Mth.clamp(targetPitch, -75.0F, 75.0F));
+
+        player.setYRot(yaw);
+        player.setXRot(pitch);
+        player.setYHeadRot(yaw);
+        player.yBodyRot = yaw;
     }
 
     private record OptionSlot(int originalIndex, DialogueOption option) {
