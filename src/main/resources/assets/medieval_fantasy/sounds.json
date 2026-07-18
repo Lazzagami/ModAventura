@@ -1,0 +1,11 @@
+{
+  "music.boss.ash_knight_battle": {
+    "subtitle": "subtitles.medieval_fantasy.ash_knight_battle",
+    "sounds": [
+      {
+        "name": "medieval_fantasy:music/boss/ash_knight_battle",
+        "stream": true
+      }
+    ]
+  }
+}

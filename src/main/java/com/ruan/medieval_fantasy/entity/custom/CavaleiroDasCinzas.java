@@ -265,6 +265,10 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         return !isFightStartedClientSafe() && getBossAnimation() != ANIMATION_DEATH_KNEEL;
     }
 
+    public boolean shouldPlayCombatMusicClient() {
+        return isAlive() && isFightStartedClientSafe() && getBossAnimation() != ANIMATION_DEATH_KNEEL;
+    }
+
     private void setFightStarted(boolean started) {
         fightStarted = started;
         entityData.set(FIGHT_STARTED, started);

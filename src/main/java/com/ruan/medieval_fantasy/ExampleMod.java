@@ -40,6 +40,7 @@ import com.ruan.medieval_fantasy.origin.network.OriginNetworkHandler;
 import com.ruan.medieval_fantasy.progression.experience.network.ExperienceNetworkHandler;
 import com.ruan.medieval_fantasy.progression.specialization.network.SpecializationNetworkHandler;
 import com.ruan.medieval_fantasy.scaling.network.ScalingNetworkHandler;
+import com.ruan.medieval_fantasy.sound.ModSounds;
 import software.bernie.geckolib.GeckoLib;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -82,6 +83,7 @@ public class ExampleMod
 
         ModEntities.ENTITY_TYPES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
+        ModSounds.SOUND_EVENTS.register(modEventBus);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
