@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,6 +19,9 @@ public class EldrathCastleBuilder {
     public static final int WALL_HEIGHT = 23;
     public static final int FREE_AIR_HEIGHT = 28;
     private static final int OUTER_TOWER_RADIUS = 10;
+    private static final int BUILD_CLEAR_RADIUS = TOTAL_SIZE / 2 + 48;
+    private static final int BUILD_CLEAR_HEIGHT = 72;
+    private static final int SAFETY_CLEAR_RADIUS = TOTAL_SIZE / 2 + 58;
 
     private final ServerLevel level;
     private final RandomSource random;
@@ -32,7 +36,7 @@ public class EldrathCastleBuilder {
     }
 
     public BuildResult build(boolean spawnBoss) {
-        clearMainCourt();
+        clearCastleFootprint();
         buildFoundationAndFloor();
         buildOuterWalls();
         buildWallwalkAndDefensiveDetails();
@@ -47,6 +51,7 @@ public class EldrathCastleBuilder {
         buildCourtyardDetails();
         buildStorytellingSetPieces();
         buildSideRuins();
+        removeUnsafeFlammableBlocks();
 
         BlockPos entrance = center.offset(0, 2, -TOTAL_SIZE / 2 - 18);
         BlockPos bossPos = center.offset(0, 1, COURTYARD_SIZE / 2 - 10);
@@ -56,12 +61,17 @@ public class EldrathCastleBuilder {
         return new BuildResult(center, entrance, bossPos);
     }
 
-    private void clearMainCourt() {
-        int radius = COURTYARD_SIZE / 2 + 8;
+    private void clearCastleFootprint() {
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        for (int x = -radius; x <= radius; x++) {
-            for (int z = -radius; z <= radius; z++) {
-                for (int y = 1; y <= FREE_AIR_HEIGHT; y++) {
+        for (int x = -BUILD_CLEAR_RADIUS; x <= BUILD_CLEAR_RADIUS; x++) {
+            for (int z = -BUILD_CLEAR_RADIUS; z <= BUILD_CLEAR_RADIUS; z++) {
+                boolean insideCastle = Math.abs(x) <= BUILD_CLEAR_RADIUS - 8 && Math.abs(z) <= BUILD_CLEAR_RADIUS - 8;
+                boolean nearApproach = Math.abs(x) <= 20 && z < -TOTAL_SIZE / 2 && z >= -TOTAL_SIZE / 2 - 48;
+                if (!insideCastle && !nearApproach) {
+                    continue;
+                }
+
+                for (int y = 1; y <= BUILD_CLEAR_HEIGHT; y++) {
                     pos.set(center.getX() + x, baseY + y, center.getZ() + z);
                     level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
                 }
@@ -985,6 +995,27 @@ public class EldrathCastleBuilder {
         boss.finalizeSpawn(level, level.getCurrentDifficultyAt(bossPos), MobSpawnType.STRUCTURE, null, null);
         boss.setPersistenceRequired();
         level.addFreshEntity(boss);
+    }
+
+    private void removeUnsafeFlammableBlocks() {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int x = -SAFETY_CLEAR_RADIUS; x <= SAFETY_CLEAR_RADIUS; x++) {
+            for (int z = -SAFETY_CLEAR_RADIUS; z <= SAFETY_CLEAR_RADIUS; z++) {
+                boolean insideCastle = Math.abs(x) <= BUILD_CLEAR_RADIUS && Math.abs(z) <= BUILD_CLEAR_RADIUS;
+                boolean nearApproach = Math.abs(x) <= 24 && z < -TOTAL_SIZE / 2 && z >= -TOTAL_SIZE / 2 - 54;
+                if (!insideCastle && !nearApproach) {
+                    continue;
+                }
+
+                for (int y = 1; y <= BUILD_CLEAR_HEIGHT; y++) {
+                    pos.set(center.getX() + x, baseY + y, center.getZ() + z);
+                    Block block = level.getBlockState(pos).getBlock();
+                    if (EldrathCastlePalette.isForbidden(block)) {
+                        level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+                    }
+                }
+            }
+        }
     }
 
     public record BuildResult(BlockPos center, BlockPos entrance, BlockPos bossPosition) {

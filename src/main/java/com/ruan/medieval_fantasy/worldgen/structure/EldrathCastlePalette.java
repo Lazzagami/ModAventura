@@ -4,6 +4,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -90,7 +91,21 @@ public final class EldrathCastlePalette {
     }
 
     public static boolean isForbidden(Block block) {
-        return block.defaultBlockState().ignitedByLava()
+        String name = block.getDescriptionId();
+        return block instanceof LeavesBlock
+                || block.defaultBlockState().ignitedByLava()
+                || name.contains("_log")
+                || name.contains("_wood")
+                || name.contains("_stem")
+                || name.contains("_hyphae")
+                || name.contains("leaves")
+                || name.contains("sapling")
+                || name.contains("vine")
+                || name.contains("grass")
+                || name.contains("flower")
+                || name.contains("mushroom")
+                || name.contains("bush")
+                || name.contains("roots")
                 || block == Blocks.OAK_PLANKS
                 || block == Blocks.SPRUCE_PLANKS
                 || block == Blocks.BIRCH_PLANKS
