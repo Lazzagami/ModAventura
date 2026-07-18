@@ -5,7 +5,7 @@
     "skip_prompt": {
       "id": "skip_prompt",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Voce ja atravessou estas palavras uma vez. Deseja deixar o silencio para tras e voltar ao fogo?",
+      "text": "Voce ja atravessou estas palavras uma vez. As cinzas ainda se lembram da sua voz. Deseja deixar o silencio para tras e voltar ao fogo?",
       "animation": "sword_rest",
       "animationTicks": 45,
       "options": [
@@ -44,7 +44,7 @@
     "someone_reached": {
       "id": "someone_reached",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Ainda ha alguem disposto a chegar ate aqui.",
+      "text": "Ainda ha alguem disposto a atravessar as cinzas ate o coracao deste reino morto.",
       "animation": "sword_rest",
       "animationTicks": 50,
       "next": "speak"
@@ -52,7 +52,7 @@
     "speak": {
       "id": "speak",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Fale. Por que voce entrou neste castelo?",
+      "text": "Fale. Antes que eu erga a lamina... diga por que voce entrou neste castelo.",
       "animation": "sword_rest",
       "animationTicks": 40,
       "options": [
@@ -158,7 +158,7 @@
     "route_search_02": {
       "id": "route_search_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Alguns procuram um rei morto. Outros procuram o homem que eram antes da chama.",
+      "text": "Alguns procuram um rei morto. Outros procuram uma pessoa que a guerra arrancou deles. Eu procurei o homem que eu era antes da chama.",
       "animation": "sword_rest",
       "animationTicks": 58,
       "next": "route_search_choice"
@@ -166,7 +166,7 @@
     "route_search_choice": {
       "id": "route_search_choice",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Diga-me: voce procura para salvar... ou para possuir?",
+      "text": "Diga-me a verdade, mesmo que ela pese. Voce procura para salvar... ou para possuir?",
       "animation": "sword_rest",
       "animationTicks": 46,
       "options": [
@@ -219,7 +219,7 @@
     "search_save_03": {
       "id": "search_save_03",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Eu abri caminho para ela. Nunca soube se alcancou o portao.",
+      "text": "Eu abri caminho para ela. Ate hoje, quando o fogo baixa, ainda escuto passos pequenos correndo para o portao. Nunca soube se chegaram.",
       "animation": "sword_rest",
       "animationTicks": 58,
       "next": "final_respect_01"
@@ -227,7 +227,7 @@
     "search_answers_01": {
       "id": "search_answers_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Respostas sobrevivem melhor que pessoas.",
+      "text": "Respostas sobrevivem melhor que pessoas. Sao mais frias. Mais faceis de carregar.",
       "animation": "sword_rest",
       "animationTicks": 48,
       "next": "search_answers_02"
@@ -235,7 +235,7 @@
     "search_answers_02": {
       "id": "search_answers_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Procure entao pelo nome apagado nas catacumbas: Aurelian. Foi por ele que o conselho traiu o rei.",
+      "text": "Procure entao pelo nome raspado das tumbas baixas: Aurelian. Foi por medo dele, e pelo poder que prometia, que o conselho vendeu o rei.",
       "animation": "sword_rest",
       "animationTicks": 72,
       "next": "final_doubt_01"
@@ -251,7 +251,7 @@
     "search_take_power_02": {
       "id": "search_take_power_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Voce procura uma desculpa.",
+      "text": "Voce procura uma desculpa com rosto humano. Eldrath morreu ouvindo frases assim.",
       "animation": "sword_rest",
       "animationTicks": 38,
       "next": "final_contempt_01"
@@ -268,7 +268,7 @@
     "route_identity_02": {
       "id": "route_identity_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Ja tive nome, posto e homens que marchavam quando eu erguia a mao.",
+      "text": "Ja tive nome, posto, homens que esperavam meu sinal... e uma rainha que acreditava que eu voltaria inteiro.",
       "animation": "sword_rest",
       "animationTicks": 58,
       "next": "route_identity_choice"
@@ -276,7 +276,7 @@
     "route_identity_choice": {
       "id": "route_identity_choice",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Hoje sou o que restou quando todas essas coisas queimaram.",
+      "text": "Hoje sou o que restou quando o nome, o posto e a promessa queimaram antes do corpo.",
       "animation": "sword_rest",
       "animationTicks": 52,
       "options": [
@@ -320,7 +320,7 @@
     "identity_name_02": {
       "id": "identity_name_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Se esse nome ainda vale algo, leve-o como aviso. Nao como trofeu.",
+      "text": "Se esse nome ainda vale algo, leve-o como aviso. Nao como trofeu. Trofeus pertencem aos vivos.",
       "animation": "sword_rest",
       "animationTicks": 56,
       "next": "final_respect_01"
@@ -336,7 +336,7 @@
     "identity_someone_01": {
       "id": "identity_someone_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "As vezes.",
+      "text": "As vezes. Por poucos segundos. Nunca o suficiente para descansar.",
       "animation": "sword_rest",
       "animationTicks": 48,
       "next": "identity_someone_02"
@@ -344,7 +344,7 @@
     "identity_someone_02": {
       "id": "identity_someone_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Quando a chama baixa, eu lembro do peso da chuva no rosto.",
+      "text": "Quando a chama baixa, eu lembro do peso da chuva no rosto... e de como foi estranho desejar frio.",
       "animation": "sword_rest",
       "animationTicks": 62,
       "next": "final_sadness_01"
@@ -405,7 +405,7 @@
     "history_who_01": {
       "id": "history_who_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "O conselho. Nao com chaves. Com votos.",
+      "text": "O conselho. Nao com chaves. Com votos. Com selos limpos, maos lavadas e olhos incapazes de encarar o povo.",
       "animation": "sword_rest",
       "animationTicks": 54,
       "next": "history_who_02"
@@ -429,7 +429,7 @@
     "history_blame_02": {
       "id": "history_blame_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Eu obedeci ao juramento quando deveria ter protegido pessoas.",
+      "text": "Eu obedeci ao juramento quando deveria ter protegido pessoas. Essa e a parte que nunca para de queimar.",
       "animation": "sword_rest",
       "animationTicks": 60,
       "next": "final_sadness_01"
@@ -445,7 +445,7 @@
     "history_relics_02": {
       "id": "history_relics_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Poder nao corrompe todos da mesma forma. Ele da a cada um uma desculpa perfeita.",
+      "text": "Poder nao corrompe todos da mesma forma. Ele apenas entrega a cada alma a desculpa perfeita para fazer o que ja desejava.",
       "animation": "sword_rest",
       "animationTicks": 70,
       "next": "final_respect_01"
@@ -454,7 +454,7 @@
     "route_mercy_01": {
       "id": "route_mercy_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Nem eu.",
+      "text": "Nem eu. Nao depois de tantos seculos ouvindo armaduras cairem vazias.",
       "animation": "sword_rest",
       "animationTicks": 54,
       "next": "route_mercy_02"
@@ -462,7 +462,7 @@
     "route_mercy_02": {
       "id": "route_mercy_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Mas ha diferenca entre nao querer lutar e estar disposto a recuar.",
+      "text": "Mas ha diferenca entre nao querer lutar... e estar disposto a recuar antes que alguem precise morrer.",
       "animation": "sword_rest",
       "animationTicks": 58,
       "options": [
@@ -497,7 +497,7 @@
     "mercy_leave_01": {
       "id": "mercy_leave_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Se eu abrisse o portao para todos que temem a lamina, Eldrath teria queimado duas vezes.",
+      "text": "Se eu abrisse o portao para todos que temem a lamina, Eldrath teria queimado duas vezes. O medo nao absolve ninguem.",
       "animation": "sword_rest",
       "animationTicks": 66,
       "next": "final_doubt_01"
@@ -513,7 +513,7 @@
     "mercy_choice_02": {
       "id": "mercy_choice_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Essa palavra morreu aqui antes do rei.",
+      "text": "Essa palavra morreu aqui antes do rei. Eu a enterrei com minhas proprias maos, sem perceber.",
       "animation": "sword_rest",
       "animationTicks": 54,
       "next": "final_sadness_01"
@@ -529,7 +529,7 @@
     "mercy_pass_02": {
       "id": "mercy_pass_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Poucos mantiveram a mao firme quando sangraram.",
+      "text": "Poucos mantiveram a mao firme quando sangraram. Menos ainda quando descobriram que o inimigo tambem tinha medo.",
       "animation": "sword_rest",
       "animationTicks": 54,
       "next": "final_respect_01"
@@ -546,7 +546,7 @@
     "route_passing_02": {
       "id": "route_passing_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Foi exatamente assim que tudo comecou.",
+      "text": "Foi exatamente assim que tudo comecou. Ninguem vinha conquistar. Todos diziam apenas atravessar.",
       "animation": "sword_rest",
       "animationTicks": 48,
       "options": [
@@ -582,7 +582,7 @@
     "passing_trust_01": {
       "id": "passing_trust_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Eu acreditava. Isso me tornou lento quando precisei ser cruel.",
+      "text": "Eu acreditava. Isso me tornou lento quando precisei ser cruel... e cruel quando ja era tarde demais.",
       "animation": "sword_rest",
       "animationTicks": 58,
       "next": "final_sadness_01"
@@ -598,7 +598,7 @@
     "passing_mad_02": {
       "id": "passing_mad_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Mas minha loucura ainda reconhece arrogancia.",
+      "text": "Mas minha loucura ainda reconhece arrogancia pelo som dos passos.",
       "animation": "draw_sword",
       "animationTicks": 48,
       "next": "final_contempt_01"
@@ -618,7 +618,7 @@
     "origin_knight_01": {
       "id": "origin_knight_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Entao ainda existem olhos capazes de ler um juramento antigo.",
+      "text": "Entao ainda existem olhos capazes de ler um juramento antigo sem confundi-lo com ornamento.",
       "animation": "sword_rest",
       "animationTicks": 52,
       "next": "origin_knight_02"
@@ -626,7 +626,7 @@
     "origin_knight_02": {
       "id": "origin_knight_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Aproxime-se, entao, como alguem que entende o peso de uma palavra dada.",
+      "text": "Aproxime-se, entao, como alguem que entende que uma palavra dada pode salvar um reino... ou prende-lo ao proprio tumulo.",
       "animation": "sword_rest",
       "animationTicks": 58,
       "options": [
@@ -664,7 +664,7 @@
     "knight_oath_prison_01": {
       "id": "knight_oath_prison_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Voce fala como alguem que ainda pode dormir.",
+      "text": "Voce fala como alguem que ainda pode dormir sem ouvir nomes nas brasas.",
       "animation": "sword_rest",
       "animationTicks": 50,
       "next": "knight_oath_prison_02"
@@ -672,7 +672,7 @@
     "knight_oath_prison_02": {
       "id": "knight_oath_prison_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Mas talvez seja isso que torna suas palavras perigosas.",
+      "text": "Mas talvez seja isso que torna suas palavras perigosas. Elas ainda carregam futuro.",
       "animation": "sword_rest",
       "animationTicks": 54,
       "next": "final_doubt_01"
@@ -680,7 +680,7 @@
     "knight_respect_post_01": {
       "id": "knight_respect_post_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Respeito e uma moeda rara em ruinas.",
+      "text": "Respeito e uma moeda rara em ruinas. Aqui, quase tudo que restou compra apenas silencio.",
       "animation": "sword_rest",
       "animationTicks": 50,
       "next": "knight_respect_post_02"
@@ -688,7 +688,7 @@
     "knight_respect_post_02": {
       "id": "knight_respect_post_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Guarde-a. Na luta, voce precisara de algo mais pesado.",
+      "text": "Guarde-a. Na luta, voce precisara de algo mais pesado que cortesia.",
       "animation": "sword_rest",
       "animationTicks": 54,
       "next": "final_respect_01"
@@ -704,7 +704,7 @@
     "knight_take_post_02": {
       "id": "knight_take_post_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Entao prove que seu juramento nao quebrara antes dos seus ossos.",
+      "text": "Entao prove que seu juramento nao quebrara antes dos seus ossos. Eu ja vi muitos se partirem na primeira chama.",
       "animation": "draw_sword",
       "animationTicks": 54,
       "next": "final_respect_01"
@@ -721,7 +721,7 @@
     "origin_archaeologist_02": {
       "id": "origin_archaeologist_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Voces deram nome ao nosso fim para que ele coubesse em livros.",
+      "text": "Voces deram nome ao nosso fim para que ele coubesse em livros. Nos o chamavamos apenas de noite.",
       "animation": "sword_rest",
       "animationTicks": 58,
       "options": [
@@ -766,7 +766,7 @@
     "archaeologist_records_02": {
       "id": "archaeologist_records_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "E eu desobedeci. A primeira vez em minha vida... tarde demais.",
+      "text": "E eu desobedeci. A primeira vez em minha vida... tarde demais para ser coragem, cedo demais para ser perdao.",
       "animation": "sword_rest",
       "animationTicks": 62,
       "next": "final_sadness_01"
@@ -774,7 +774,7 @@
     "archaeologist_before_war_01": {
       "id": "archaeologist_before_war_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Voce leu as rachaduras antes de olhar para as chamas.",
+      "text": "Voce leu as rachaduras antes de olhar para as chamas. Poucos estudiosos percebem que ruinas comecam em salas iluminadas.",
       "animation": "sword_rest",
       "animationTicks": 54,
       "next": "archaeologist_before_war_02"
@@ -782,7 +782,7 @@
     "archaeologist_before_war_02": {
       "id": "archaeologist_before_war_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Sim. Eldrath apodreceu enquanto suas bandeiras ainda brilhavam.",
+      "text": "Sim. Eldrath apodreceu enquanto suas bandeiras ainda brilhavam e o povo ainda aplaudia desfiles.",
       "animation": "sword_rest",
       "animationTicks": 60,
       "next": "final_doubt_01"
@@ -790,7 +790,7 @@
     "archaeologist_truth_01": {
       "id": "archaeologist_truth_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "A verdade nao devolve mortos.",
+      "text": "A verdade nao devolve mortos. Mas roubar a verdade deles e mata-los uma segunda vez.",
       "animation": "sword_rest",
       "animationTicks": 46,
       "next": "archaeologist_truth_02"
@@ -815,7 +815,7 @@
     "origin_renegade_02": {
       "id": "origin_renegade_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Um trono vazio ainda atrai os piores tipos de gente.",
+      "text": "Um trono vazio ainda atrai os piores tipos de gente. Gente que sente cheiro de ausencia como lobos sentem sangue.",
       "animation": "sword_rest",
       "animationTicks": 52,
       "options": [
@@ -851,7 +851,7 @@
     "renegade_no_pretend_01": {
       "id": "renegade_no_pretend_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Honestidade sem honra ainda e so faca no escuro.",
+      "text": "Honestidade sem honra ainda e so faca no escuro. Pelo menos voce nao a esconde atras de um brasao.",
       "animation": "draw_sword",
       "animationTicks": 48,
       "next": "final_contempt_01"
@@ -859,7 +859,7 @@
     "renegade_prison_01": {
       "id": "renegade_prison_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Entao voce tambem conhece correntes sem metal.",
+      "text": "Entao voce tambem conhece correntes sem metal. As suas talvez tenham nomes diferentes das minhas.",
       "animation": "sword_rest",
       "animationTicks": 54,
       "next": "renegade_prison_02"
@@ -867,7 +867,7 @@
     "renegade_prison_02": {
       "id": "renegade_prison_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Nao confunda reconhecer uma cela com ter a chave.",
+      "text": "Nao confunda reconhecer uma cela com ter a chave. Eu reconheci a minha por seculos.",
       "animation": "sword_rest",
       "animationTicks": 54,
       "next": "final_doubt_01"
@@ -887,7 +887,7 @@
     "final_respect_01": {
       "id": "final_respect_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Voce fala como alguem que ainda pesa as proprias palavras.",
+      "text": "Voce fala como alguem que ainda pesa as proprias palavras. Isso e raro. E perigoso.",
       "animation": "sword_rest",
       "animationTicks": 54,
       "next": "final_respect_02"
@@ -895,7 +895,7 @@
     "final_respect_02": {
       "id": "final_respect_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Entao eu lhe darei algo raro neste castelo: respeito antes da lamina.",
+      "text": "Entao eu lhe darei algo raro neste castelo: respeito antes da lamina. Nao desperdice esse ultimo gesto.",
       "animation": "draw_sword",
       "animationTicks": 58,
       "next": "fight_start_respect"
@@ -903,7 +903,7 @@
     "final_doubt_01": {
       "id": "final_doubt_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Ha rachaduras em sua certeza.",
+      "text": "Ha rachaduras em sua certeza. Eu vejo a luz passando por elas.",
       "animation": "sword_rest",
       "animationTicks": 50,
       "next": "final_doubt_02"
@@ -911,7 +911,7 @@
     "final_doubt_02": {
       "id": "final_doubt_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Talvez isso o salve. Talvez seja por elas que o fogo entrara.",
+      "text": "Talvez isso o salve. Talvez seja por elas que o fogo entrara primeiro.",
       "animation": "sword_rest",
       "animationTicks": 58,
       "next": "fight_start_doubt"
@@ -927,7 +927,7 @@
     "final_sadness_02": {
       "id": "final_sadness_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Esse instante acabou.",
+      "text": "Esse instante acabou. Perdoe o homem que eu fui; enfrente o que restou dele.",
       "animation": "draw_sword",
       "animationTicks": 52,
       "next": "fight_start_sadness"
@@ -935,7 +935,7 @@
     "final_contempt_01": {
       "id": "final_contempt_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Ja ouvi bastante.",
+      "text": "Ja ouvi bastante. Eldrath tambem ouviu palavras bonitas antes de queimar.",
       "animation": "draw_sword",
       "animationTicks": 42,
       "next": "final_contempt_02"
@@ -943,7 +943,7 @@
     "final_contempt_02": {
       "id": "final_contempt_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Que suas ultimas palavras sejam melhores que estas.",
+      "text": "Que suas ultimas palavras, quando chegarem, sejam melhores que estas.",
       "animation": "sword_rest",
       "animationTicks": 46,
       "next": "fight_start_anger"
@@ -963,7 +963,7 @@
     "fight_start_respect": {
       "id": "fight_start_respect",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Mostre-me se sua conviccao pesa mais que a minha.",
+      "text": "Mostre-me se sua conviccao pesa mais que a minha. Que a lamina julgue o que as palavras nao podem.",
       "animation": "draw_sword",
       "animationTicks": 50,
       "actions": [
@@ -975,7 +975,7 @@
     "fight_start_doubt": {
       "id": "fight_start_doubt",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Venha. A duvida tambem precisa ser testada.",
+      "text": "Venha. A duvida tambem precisa ser testada no fogo.",
       "animation": "sword_rest",
       "animationTicks": 46,
       "actions": [
@@ -987,7 +987,7 @@
     "fight_start_sadness": {
       "id": "fight_start_sadness",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Perdoe-me, se ainda existe alguem capaz disso.",
+      "text": "Perdoe-me, se ainda existe alguem neste mundo capaz disso.",
       "animation": "draw_sword",
       "animationTicks": 50,
       "actions": [
@@ -999,7 +999,7 @@
     "fight_start_anger": {
       "id": "fight_start_anger",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Chega.",
+      "text": "Chega. O castelo ja suportou sua voz por tempo demais.",
       "animation": "draw_sword",
       "animationTicks": 34,
       "actions": [
