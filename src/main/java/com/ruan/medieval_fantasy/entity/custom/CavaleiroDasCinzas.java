@@ -2399,11 +2399,14 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         if (!(level() instanceof ServerLevel serverLevel)) {
             return;
         }
+        if (dialogueMode) {
+            return;
+        }
 
-        Component component = Component.literal("<Cavaleiro das Cinzas> " + message);
+        Component component = Component.literal(message);
         for (ServerPlayer player : serverLevel.players()) {
             if (player.distanceToSqr(this) <= 64.0D * 64.0D) {
-                player.sendSystemMessage(component);
+                player.displayClientMessage(component, true);
             }
         }
     }
