@@ -20,9 +20,12 @@ import java.util.Map;
 
 public class AttributeScreen extends Screen {
 
-    private static final int PANEL_WIDTH = 430;
-    private static final int PANEL_HEIGHT = 276;
+    private static final int PANEL_WIDTH = 460;
+    private static final int PANEL_HEIGHT = 292;
     private static final int ROW_HEIGHT = 24;
+    private static final int MILESTONE_TEXT_WIDTH = PANEL_WIDTH - 236;
+    private static final int MILESTONE_BUTTON_WIDTH = 164;
+    private static final int TITLE_AREA_Y_OFFSET = PANEL_HEIGHT - 76;
     private Tab activeTab;
 
     public AttributeScreen() {
@@ -83,33 +86,35 @@ public class AttributeScreen extends Screen {
     }
 
     private void addMilestoneChoiceButtons(int left, int top) {
-        int y = top + 78;
+        int y = top + 58;
         int rendered = 0;
         for (PendingMilestone pending : pendingMilestones()) {
-            int buttonX = left + PANEL_WIDTH - 176;
-            int buttonY = y + 18;
-            int optionIndex = 0;
+            int buttonX = left + PANEL_WIDTH - MILESTONE_BUTTON_WIDTH - 20;
+            int optionY = y + 20;
             for (PassiveDefinition option : PassiveRegistry.options(pending.attribute(), pending.milestone())) {
                 int currentOption = option.option();
+                String line = option.displayName() + ": " + option.description();
+                int lineHeight = wrappedHeight(line, MILESTONE_TEXT_WIDTH);
+                int buttonY = optionY + Math.max(0, lineHeight - 20) / 2 - 2;
                 addRenderableWidget(Button.builder(Component.literal(shortText(option.displayName(), 18)), button -> {
                     SpecializationNetworkHandler.choosePassive(pending.attribute(), pending.milestone(), currentOption);
                     SpecializationNetworkHandler.requestSyncFromServer();
                     switchTab(Tab.MILESTONES);
-                }).bounds(buttonX, buttonY + optionIndex * 22, 156, 20).build());
-                optionIndex++;
+                }).bounds(buttonX, buttonY, MILESTONE_BUTTON_WIDTH, 20).build());
+                optionY += Math.max(24, lineHeight + 6);
             }
 
-            y += 76;
+            y = optionY + 10;
             rendered++;
-            if (rendered >= 2) {
+            if (rendered >= 2 || y > top + TITLE_AREA_Y_OFFSET - 18) {
                 break;
             }
         }
     }
 
     private void addTitleButtons(int left, int top) {
-        int x = left + 24;
-        int y = top + PANEL_HEIGHT - 56;
+        int x = left + PANEL_WIDTH - 324;
+        int y = top + TITLE_AREA_Y_OFFSET + 31;
         int added = 0;
         for (String titleId : ClientSpecializationData.titles()) {
             String title = TitleRegistry.byId(titleId).map(t -> t.displayName()).orElse(titleId);
@@ -134,8 +139,8 @@ public class AttributeScreen extends Screen {
         graphics.fill(left + 2, top + 2, left + PANEL_WIDTH - 2, top + PANEL_HEIGHT - 2, 0xAA2B1810);
 
         graphics.drawCenteredString(font, title, width / 2, top + 8, 0xFFD08A3A);
-        graphics.drawString(font, "Nivel: " + ClientExperienceData.level(), left + 250, top + 32, 0xFFE6D4B8, false);
-        graphics.drawString(font, "Pontos: " + ClientScalingData.getAvailablePoints(), left + 320, top + 32, 0xFFFFC86B, false);
+        graphics.drawString(font, "Nivel: " + ClientExperienceData.level(), left + 280, top + 32, 0xFFE6D4B8, false);
+        graphics.drawString(font, "Pontos: " + ClientScalingData.getAvailablePoints(), left + 354, top + 32, 0xFFFFC86B, false);
 
         if (activeTab == Tab.ATTRIBUTES) {
             renderAttributesTab(graphics, left, top);
@@ -174,35 +179,35 @@ public class AttributeScreen extends Screen {
             drawWrapped(graphics, "Nenhuma escolha pendente agora. Ao atingir 15, 30, 50, 75 ou 100 pontos em um atributo, novas escolhas aparecem aqui.",
                     left + 18, top + 76, PANEL_WIDTH - 36, 0xFFE6D4B8);
         } else {
-            int y = top + 56;
+            int y = top + 58;
             int rendered = 0;
             for (PendingMilestone milestone : pending) {
-                drawPendingMilestone(graphics, left, y, milestone);
-                y += 76;
+                y = drawPendingMilestone(graphics, left, y, milestone) + 10;
                 rendered++;
-                if (rendered >= 2) {
+                if (rendered >= 2 || y > top + TITLE_AREA_Y_OFFSET - 18) {
                     break;
                 }
             }
 
             if (pending.size() > 2) {
-                graphics.drawString(font, "+" + (pending.size() - 2) + " marco(s) aguardando escolha.", left + 18, top + 208, 0xFF8F7A65, false);
+                graphics.drawString(font, "+" + (pending.size() - 2) + " marco(s) aguardando escolha.", left + 18, top + TITLE_AREA_Y_OFFSET - 12, 0xFF8F7A65, false);
             }
         }
 
-        drawTitleInfo(graphics, left, top + PANEL_HEIGHT - 78);
+        drawTitleInfo(graphics, left, top + TITLE_AREA_Y_OFFSET);
     }
 
-    private void drawPendingMilestone(GuiGraphics graphics, int left, int y, PendingMilestone milestone) {
+    private int drawPendingMilestone(GuiGraphics graphics, int left, int y, PendingMilestone milestone) {
         String title = displayAttribute(milestone.attribute()) + " " + milestone.milestone() + " - escolha permanente";
         graphics.drawString(font, title, left + 18, y, 0xFFFFD36B, false);
 
         int textY = y + 15;
         for (PassiveDefinition option : PassiveRegistry.options(milestone.attribute(), milestone.milestone())) {
             String line = option.displayName() + ": " + option.description();
-            int used = drawWrapped(graphics, line, left + 22, textY, PANEL_WIDTH - 218, 0xFFE6D4B8);
-            textY += Math.max(11, used);
+            int used = drawWrapped(graphics, line, left + 22, textY, MILESTONE_TEXT_WIDTH, 0xFFE6D4B8);
+            textY += Math.max(24, used + 6);
         }
+        return textY;
     }
 
     private void drawAttribute(GuiGraphics graphics, int left, int y, String name, PlayerAttribute attribute, String description) {
@@ -217,6 +222,10 @@ public class AttributeScreen extends Screen {
             graphics.drawString(font, lines.get(i), x, y + i * 10, color, false);
         }
         return lines.size() * 10;
+    }
+
+    private int wrappedHeight(String text, int width) {
+        return Math.max(10, font.split(Component.literal(text), width).size() * 10);
     }
 
     private List<PendingMilestone> pendingMilestones() {
@@ -241,10 +250,11 @@ public class AttributeScreen extends Screen {
     }
 
     private void drawTitleInfo(GuiGraphics graphics, int left, int y) {
+        graphics.fill(left + 14, y - 8, left + PANEL_WIDTH - 14, y - 7, 0x553A2418);
         graphics.drawString(font, "Titulo equipado: " + equippedTitleText(), left + 18, y, 0xFFD08A3A, false);
         graphics.drawString(font, "Titulos desbloqueados: " + ClientSpecializationData.titles().size(), left + 18, y + 12, 0xFFE6D4B8, false);
         if (!ClientSpecializationData.titles().isEmpty()) {
-            graphics.drawString(font, "Clique em um titulo para equipar.", left + 18, y + 24, 0xFF8F7A65, false);
+            graphics.drawString(font, "Escolha um titulo abaixo:", left + 18, y + 24, 0xFF8F7A65, false);
         }
     }
 
