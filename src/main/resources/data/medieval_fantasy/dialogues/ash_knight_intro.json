@@ -27,14 +27,6 @@
       "text": "...",
       "animation": "sword_rest",
       "animationTicks": 50,
-      "next": "steps"
-    },
-    "steps": {
-      "id": "steps",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Passos...",
-      "animation": "sword_rest",
-      "animationTicks": 42,
       "next": "after_so_long"
     },
     "after_so_long": {
@@ -43,6 +35,9 @@
       "text": "Depois de tanto tempo...",
       "animation": "sword_rest",
       "animationTicks": 45,
+      "entryActions": [
+        { "type": "boss_step_sound", "volume": 0.9, "pitch": 0.62 }
+      ],
       "next": "someone_reached"
     },
     "someone_reached": {

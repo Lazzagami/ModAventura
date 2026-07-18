@@ -9,6 +9,8 @@ public class DialogueAction {
     private boolean booleanValue;
     private String animation;
     private int duration;
+    private float volume = 1.0F;
+    private float pitch = 1.0F;
 
     public String getType() {
         return type == null ? "" : type;
@@ -36,5 +38,13 @@ public class DialogueAction {
 
     public int getDuration() {
         return duration;
+    }
+
+    public float getVolume() {
+        return volume;
+    }
+
+    public float getPitch() {
+        return pitch;
     }
 }

@@ -12,6 +12,7 @@ public class DialogueNode {
     private int animationTicks;
     private String next;
     private List<DialogueOption> options;
+    private List<DialogueAction> entryActions;
     private List<DialogueAction> actions;
 
     public String getId() {
@@ -44,6 +45,10 @@ public class DialogueNode {
 
     public List<DialogueOption> getOptions() {
         return options == null ? List.of() : options;
+    }
+
+    public List<DialogueAction> getEntryActions() {
+        return entryActions == null ? List.of() : entryActions;
     }
 
     public List<DialogueAction> getActions() {

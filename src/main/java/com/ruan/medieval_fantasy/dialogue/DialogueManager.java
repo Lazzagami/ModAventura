@@ -5,6 +5,7 @@ import com.ruan.medieval_fantasy.entity.custom.CavaleiroDasCinzas;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -108,6 +109,7 @@ public final class DialogueManager {
         if (node.getAnimation() != null && speaker instanceof CavaleiroDasCinzas boss) {
             boss.playDialogueAnimation(node.getAnimation(), node.getAnimationTicks());
         }
+        node.getEntryActions().forEach(action -> runAction(player, speaker, action));
     }
 
     private static void runAction(ServerPlayer player, LivingEntity speaker, DialogueAction action) {
@@ -120,6 +122,10 @@ public final class DialogueManager {
                 if (speaker instanceof CavaleiroDasCinzas boss) {
                     boss.playDialogueAnimation(action.getAnimation(), action.getDuration());
                 }
+            }
+            case "boss_step_sound", "step_sound" -> {
+                speaker.level().playSound(null, speaker.blockPosition(), SoundEvents.NETHERITE_BLOCK_STEP, speaker.getSoundSource(), action.getVolume(), action.getPitch());
+                speaker.level().playSound(null, speaker.blockPosition(), SoundEvents.CHAIN_STEP, speaker.getSoundSource(), action.getVolume() * 0.45F, action.getPitch() * 0.82F);
             }
             case "start_boss_fight" -> {
                 if (speaker instanceof CavaleiroDasCinzas boss) {
