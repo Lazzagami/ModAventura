@@ -48,9 +48,11 @@ public class EldrathCastleBuilder {
         buildOuterCastleSilhouette();
         buildThroneHallFacade();
         buildExplorableInteriorRooms();
+        buildNarrativeDungeonLayer();
         buildCourtyardDetails();
         buildStorytellingSetPieces();
         buildSideRuins();
+        buildFinalEnvironmentalPolish();
         removeUnsafeFlammableBlocks();
 
         BlockPos entrance = center.offset(0, 2, -TOTAL_SIZE / 2 - 18);
@@ -644,6 +646,212 @@ public class EldrathCastleBuilder {
         buildGuardPosts();
     }
 
+    private void buildNarrativeDungeonLayer() {
+        buildProcessionCourt();
+        buildOathChapel();
+        buildCommandersGallery();
+        buildArenaRingAndBossVista();
+        buildInteriorWallDepth();
+        buildBrokenUpperWalkways();
+        buildAshenLightingComposition();
+    }
+
+    private void buildProcessionCourt() {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int z = -TOTAL_SIZE / 2 + 10; z <= -COURTYARD_SIZE / 2 - 4; z++) {
+            for (int x = -31; x <= 31; x++) {
+                boolean centralRoad = Math.abs(x) <= 6;
+                boolean terrace = Math.abs(x) >= 18 && Math.abs(x) <= 30;
+                boolean brokenEdge = Math.abs(x) == 31 && random.nextInt(100) < 28;
+                pos.set(center.getX() + x, baseY, center.getZ() + z);
+                if (centralRoad) {
+                    level.setBlock(pos, random.nextInt(100) < 28 ? Blocks.CRACKED_STONE_BRICKS.defaultBlockState() : Blocks.CHISELED_STONE_BRICKS.defaultBlockState(), 2);
+                } else if (terrace) {
+                    level.setBlock(pos, random.nextInt(100) < 35 ? EldrathCastlePalette.scorched(random) : Blocks.POLISHED_BLACKSTONE_BRICKS.defaultBlockState(), 2);
+                }
+
+                if ((Math.abs(x) == 17 || Math.abs(x) == 31) && !brokenEdge) {
+                    for (int y = 1; y <= 2 + random.nextInt(2); y++) {
+                        pos.set(center.getX() + x, baseY + y, center.getZ() + z);
+                        level.setBlock(pos, y == 1 ? EldrathCastlePalette.wall(random) : EldrathCastlePalette.wallTrim(random), 2);
+                    }
+                }
+            }
+
+            if ((z + 2) % 14 == 0) {
+                buildRuinedStatueBase(-24, z, Direction.EAST);
+                buildRuinedStatueBase(24, z, Direction.WEST);
+            }
+        }
+    }
+
+    private void buildOathChapel() {
+        int originX = -34;
+        int originZ = COURTYARD_SIZE / 2 + 4;
+        buildRoomShell(originX, originZ, 26, 34, 13, Direction.EAST);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+
+        for (int z = originZ + 5; z <= originZ + 25; z += 5) {
+            for (int x : new int[]{originX + 7, originX + 18}) {
+                placeRelicPedestal(x, z, Blocks.CHISELED_DEEPSLATE.defaultBlockState());
+            }
+        }
+
+        for (int x = originX + 8; x <= originX + 17; x++) {
+            for (int z = originZ + 27; z <= originZ + 30; z++) {
+                pos.set(center.getX() + x, baseY + 1, center.getZ() + z);
+                level.setBlock(pos, Blocks.POLISHED_BLACKSTONE_BRICKS.defaultBlockState(), 2);
+            }
+        }
+
+        for (int y = 2; y <= 6; y++) {
+            pos.set(center.getX() + originX + 12, baseY + y, center.getZ() + originZ + 30);
+            level.setBlock(pos, y % 2 == 0 ? Blocks.CHISELED_STONE_BRICKS.defaultBlockState() : Blocks.CHISELED_POLISHED_BLACKSTONE.defaultBlockState(), 2);
+        }
+
+        for (int z = originZ + 8; z <= originZ + 22; z += 7) {
+            buildBrokenArch(originX + 3, z, originX + 22, 8);
+        }
+    }
+
+    private void buildCommandersGallery() {
+        int originX = 10;
+        int originZ = COURTYARD_SIZE / 2 + 4;
+        buildRoomShell(originX, originZ, 28, 34, 12, Direction.WEST);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+
+        for (int z = originZ + 6; z <= originZ + 26; z += 5) {
+            for (int x = originX + 5; x <= originX + 22; x += 17) {
+                pos.set(center.getX() + x, baseY + 1, center.getZ() + z);
+                level.setBlock(pos, Blocks.POLISHED_BLACKSTONE_BRICKS.defaultBlockState(), 2);
+                pos.set(center.getX() + x, baseY + 2, center.getZ() + z);
+                level.setBlock(pos, Blocks.CHISELED_STONE_BRICKS.defaultBlockState(), 2);
+                pos.set(center.getX() + x, baseY + 3, center.getZ() + z);
+                level.setBlock(pos, Blocks.CHAIN.defaultBlockState(), 3);
+            }
+        }
+
+        for (int x = originX + 4; x <= originX + 23; x++) {
+            if (x % 4 != 0) {
+                pos.set(center.getX() + x, baseY + 7, center.getZ() + originZ + 31);
+                level.setBlock(pos, EldrathCastlePalette.slab(random), 2);
+            }
+        }
+    }
+
+    private void buildArenaRingAndBossVista() {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        int inner = COURTYARD_SIZE / 2 - 11;
+        int outer = COURTYARD_SIZE / 2 - 5;
+        for (int x = -outer; x <= outer; x++) {
+            for (int z = -outer; z <= outer; z++) {
+                int dist = Math.max(Math.abs(x), Math.abs(z));
+                boolean cornerCut = Math.abs(x) + Math.abs(z) > outer + inner;
+                if (dist >= inner && dist <= outer && !cornerCut) {
+                    pos.set(center.getX() + x, baseY, center.getZ() + z);
+                    BlockState state = random.nextInt(100) < 30
+                            ? EldrathCastlePalette.scorched(random)
+                            : Blocks.POLISHED_BLACKSTONE_BRICKS.defaultBlockState();
+                    level.setBlock(pos, state, 2);
+                }
+            }
+        }
+
+        for (int x = -28; x <= 28; x += 14) {
+            buildLowArenaMarker(x, -COURTYARD_SIZE / 2 + 8);
+            buildLowArenaMarker(x, COURTYARD_SIZE / 2 - 8);
+        }
+        for (int z = -22; z <= 22; z += 14) {
+            buildLowArenaMarker(-COURTYARD_SIZE / 2 + 8, z);
+            buildLowArenaMarker(COURTYARD_SIZE / 2 - 8, z);
+        }
+
+        for (int x = -10; x <= 10; x++) {
+            for (int z = COURTYARD_SIZE / 2 - 14; z <= COURTYARD_SIZE / 2 - 6; z++) {
+                pos.set(center.getX() + x, baseY, center.getZ() + z);
+                level.setBlock(pos, random.nextInt(100) < 25 ? Blocks.MAGMA_BLOCK.defaultBlockState() : EldrathCastlePalette.scorched(random), 2);
+            }
+        }
+    }
+
+    private void buildLowArenaMarker(int x, int z) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        pos.set(center.getX() + x, baseY + 1, center.getZ() + z);
+        level.setBlock(pos, Blocks.POLISHED_BLACKSTONE_BRICKS.defaultBlockState(), 2);
+        if (random.nextBoolean()) {
+            pos.set(center.getX() + x, baseY + 2, center.getZ() + z);
+            level.setBlock(pos, Blocks.CHAIN.defaultBlockState(), 3);
+        }
+    }
+
+    private void buildInteriorWallDepth() {
+        int inner = COURTYARD_SIZE / 2 + 4;
+        for (int z = -COURTYARD_SIZE / 2 + 8; z <= COURTYARD_SIZE / 2 - 10; z += 12) {
+            buildInteriorAlcove(-inner, z, Direction.EAST);
+            buildInteriorAlcove(inner, z, Direction.WEST);
+        }
+        for (int x = -COURTYARD_SIZE / 2 + 10; x <= COURTYARD_SIZE / 2 - 10; x += 14) {
+            buildInteriorAlcove(x, -COURTYARD_SIZE / 2 - 2, Direction.SOUTH);
+        }
+    }
+
+    private void buildInteriorAlcove(int x, int z, Direction facing) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int y = 1; y <= 8 + random.nextInt(4); y++) {
+            int width = y < 5 ? 2 : 1;
+            for (int w = -width; w <= width; w++) {
+                int px = x + (facing.getStepZ() != 0 ? w : 0);
+                int pz = z + (facing.getStepX() != 0 ? w : 0);
+                pos.set(center.getX() + px, baseY + y, center.getZ() + pz);
+                level.setBlock(pos, y % 4 == 0 ? Blocks.CHISELED_STONE_BRICKS.defaultBlockState() : EldrathCastlePalette.wall(random), 2);
+            }
+        }
+
+        int flameX = x + facing.getStepX();
+        int flameZ = z + facing.getStepZ();
+        pos.set(center.getX() + flameX, baseY, center.getZ() + flameZ);
+        level.setBlock(pos, Blocks.MAGMA_BLOCK.defaultBlockState(), 3);
+        pos.set(center.getX() + flameX, baseY + 1, center.getZ() + flameZ);
+        level.setBlock(pos, Blocks.FIRE.defaultBlockState(), 3);
+    }
+
+    private void buildBrokenUpperWalkways() {
+        buildUpperWalkway(-54, -12, -54, 32, Direction.EAST);
+        buildUpperWalkway(54, -6, 54, 38, Direction.WEST);
+        buildUpperWalkway(-30, 58, 30, 58, Direction.NORTH);
+    }
+
+    private void buildUpperWalkway(int x1, int z1, int x2, int z2, Direction facing) {
+        int steps = Math.max(Math.abs(x2 - x1), Math.abs(z2 - z1));
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int i = 0; i <= steps; i++) {
+            int x = x1 + (x2 - x1) * i / Math.max(1, steps);
+            int z = z1 + (z2 - z1) * i / Math.max(1, steps);
+            if (random.nextInt(100) < 18) {
+                continue;
+            }
+            for (int w = -2; w <= 2; w++) {
+                int px = x + (facing.getStepZ() != 0 ? w : 0);
+                int pz = z + (facing.getStepX() != 0 ? w : 0);
+                pos.set(center.getX() + px, baseY + 12, center.getZ() + pz);
+                level.setBlock(pos, EldrathCastlePalette.slab(random), 2);
+                if (Math.abs(w) == 2 && i % 3 == 0) {
+                    pos.set(center.getX() + px, baseY + 13, center.getZ() + pz);
+                    level.setBlock(pos, EldrathCastlePalette.wallTrim(random), 2);
+                }
+            }
+        }
+    }
+
+    private void buildAshenLightingComposition() {
+        placeRelicPedestal(-30, -30, Blocks.SOUL_LANTERN.defaultBlockState());
+        placeRelicPedestal(30, -30, Blocks.SOUL_LANTERN.defaultBlockState());
+        placeRelicPedestal(-30, 30, Blocks.SOUL_LANTERN.defaultBlockState());
+        placeRelicPedestal(30, 30, Blocks.SOUL_LANTERN.defaultBlockState());
+        placeRelicPedestal(-14, COURTYARD_SIZE / 2 - 11, Blocks.LANTERN.defaultBlockState());
+        placeRelicPedestal(14, COURTYARD_SIZE / 2 - 11, Blocks.LANTERN.defaultBlockState());
+    }
+
     private void buildArmory(int originX, int originZ) {
         buildRoomShell(originX, originZ, 28, 22, 9, Direction.SOUTH);
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
@@ -966,6 +1174,105 @@ public class EldrathCastleBuilder {
         ruinRoom(47, -12, 20, 22);
         ruinRoom(-42, 38, 28, 18);
         ruinRoom(42, 34, 24, 20);
+    }
+
+    private void buildFinalEnvironmentalPolish() {
+        scorchOuterGround();
+        addControlledRubbleFields();
+        addWallScars();
+    }
+
+    private void scorchOuterGround() {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        int innerCastle = TOTAL_SIZE / 2 + 6;
+        int outerScorched = TOTAL_SIZE / 2 + 34;
+        for (int x = -outerScorched; x <= outerScorched; x++) {
+            for (int z = -outerScorched; z <= outerScorched; z++) {
+                boolean mainCastleFloor = Math.abs(x) <= innerCastle && Math.abs(z) <= innerCastle;
+                boolean approach = Math.abs(x) <= 26 && z < -TOTAL_SIZE / 2 && z >= -TOTAL_SIZE / 2 - 54;
+                boolean perimeter = Math.abs(x) <= outerScorched && Math.abs(z) <= outerScorched;
+                if (mainCastleFloor || approach || !perimeter) {
+                    continue;
+                }
+
+                int distance = Math.max(Math.abs(x), Math.abs(z));
+                int chance = distance < TOTAL_SIZE / 2 + 20 ? 70 : 35;
+                if (random.nextInt(100) >= chance) {
+                    continue;
+                }
+
+                pos.set(center.getX() + x, baseY, center.getZ() + z);
+                Block block = level.getBlockState(pos).getBlock();
+                if (block == Blocks.AIR || block == Blocks.WATER || block == Blocks.LAVA) {
+                    continue;
+                }
+                level.setBlock(pos, random.nextInt(100) < 65 ? EldrathCastlePalette.scorched(random) : EldrathCastlePalette.ash(random), 2);
+            }
+        }
+    }
+
+    private void addControlledRubbleFields() {
+        addRubbleField(-45, -55, 18, 9, Direction.SOUTH);
+        addRubbleField(45, -50, 16, 11, Direction.SOUTH);
+        addRubbleField(-54, 6, 10, 22, Direction.EAST);
+        addRubbleField(54, 14, 12, 20, Direction.WEST);
+        addRubbleField(-24, 54, 18, 10, Direction.NORTH);
+        addRubbleField(26, 56, 16, 11, Direction.NORTH);
+    }
+
+    private void addRubbleField(int originX, int originZ, int width, int length, Direction spillDirection) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int x = -width / 2; x <= width / 2; x++) {
+            for (int z = -length / 2; z <= length / 2; z++) {
+                int distance = Math.abs(x) + Math.abs(z);
+                if (random.nextInt(100) < 42 + distance * 2) {
+                    continue;
+                }
+                int px = originX + x + spillDirection.getStepX() * random.nextInt(3);
+                int pz = originZ + z + spillDirection.getStepZ() * random.nextInt(3);
+                pos.set(center.getX() + px, baseY + 1, center.getZ() + pz);
+                BlockState rubble = random.nextInt(100) < 55
+                        ? EldrathCastlePalette.wall(random)
+                        : EldrathCastlePalette.slab(random);
+                level.setBlock(pos, rubble, 2);
+                if (random.nextInt(100) < 18) {
+                    pos.set(center.getX() + px, baseY, center.getZ() + pz);
+                    level.setBlock(pos, EldrathCastlePalette.scorched(random), 2);
+                }
+            }
+        }
+    }
+
+    private void addWallScars() {
+        for (int z = -54; z <= 54; z += 18) {
+            addVerticalWallScar(-TOTAL_SIZE / 2 + WALL_THICKNESS + 1, z, Direction.EAST);
+            addVerticalWallScar(TOTAL_SIZE / 2 - WALL_THICKNESS - 1, z, Direction.WEST);
+        }
+        for (int x = -48; x <= 48; x += 16) {
+            if (!isGateGap(x)) {
+                addVerticalWallScar(x, -TOTAL_SIZE / 2 + WALL_THICKNESS + 1, Direction.SOUTH);
+            }
+            addVerticalWallScar(x, TOTAL_SIZE / 2 - WALL_THICKNESS - 1, Direction.NORTH);
+        }
+    }
+
+    private void addVerticalWallScar(int x, int z, Direction inward) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        int height = 6 + random.nextInt(9);
+        for (int y = 3; y <= height; y++) {
+            int width = y % 3 == 0 ? 2 : 1;
+            for (int w = -width; w <= width; w++) {
+                if (random.nextInt(100) < 24) {
+                    continue;
+                }
+                int px = x + (inward.getStepZ() != 0 ? w : 0);
+                int pz = z + (inward.getStepX() != 0 ? w : 0);
+                pos.set(center.getX() + px, baseY + y, center.getZ() + pz);
+                if (!level.getBlockState(pos).isAir()) {
+                    level.setBlock(pos, random.nextBoolean() ? EldrathCastlePalette.scorched(random) : Blocks.CRACKED_STONE_BRICKS.defaultBlockState(), 2);
+                }
+            }
+        }
     }
 
     private void ruinRoom(int originX, int originZ, int width, int length) {
