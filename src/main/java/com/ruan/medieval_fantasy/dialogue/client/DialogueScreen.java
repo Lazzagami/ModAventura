@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class DialogueScreen extends Screen {
     private String nodeId;
     private int visibleCharacters;
     private int tickCounter;
+    private int selectedOptionIndex;
 
     public DialogueScreen(DialogueTree tree, String nodeId, int speakerEntityId) {
         super(Component.literal("Dialogue"));
@@ -50,8 +52,8 @@ public class DialogueScreen extends Screen {
 
         lockCameraOnSpeaker();
         tickCounter++;
-        if (tickCounter % 2 == 0 && visibleCharacters < node.getText().length()) {
-            visibleCharacters++;
+        if (visibleCharacters < node.getText().length()) {
+            visibleCharacters = Math.min(node.getText().length(), visibleCharacters + 2);
         }
     }
 
@@ -63,8 +65,10 @@ public class DialogueScreen extends Screen {
         }
 
         String visibleText = node.getText().substring(0, Math.min(visibleCharacters, node.getText().length()));
+        List<OptionSlot> options = visibleOptions(node);
+        selectedOptionIndex = normalizeSelectedOption(selectedOptionIndex, options.size());
         DialogueRenderer.renderBox(graphics, font, node, visibleText, mouseX, mouseY, width, height,
-                isTextComplete(node), visibleOptions(node).stream().map(OptionSlot::option).toList());
+                isTextComplete(node), options.stream().map(OptionSlot::option).toList(), selectedOptionIndex);
 
         super.render(graphics, mouseX, mouseY, partialTick);
     }
@@ -93,6 +97,7 @@ public class DialogueScreen extends Screen {
         }
 
         if (clickedOption >= 0 && clickedOption < options.size()) {
+            selectedOptionIndex = clickedOption;
             DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, options.get(clickedOption).originalIndex());
             return true;
         }
@@ -102,11 +107,41 @@ public class DialogueScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        DialogueNode node = currentNode();
+        if (node == null) {
+            return true;
+        }
+
+        if (!isTextComplete(node)) {
+            visibleCharacters = node.getText().length();
+            return true;
+        }
+
+        List<OptionSlot> options = visibleOptions(node);
+        if (keyCode == GLFW.GLFW_KEY_W || keyCode == GLFW.GLFW_KEY_UP || keyCode == GLFW.GLFW_KEY_A || keyCode == GLFW.GLFW_KEY_LEFT) {
+            selectedOptionIndex = moveSelection(selectedOptionIndex, options.size(), -1);
+            return true;
+        }
+
+        if (keyCode == GLFW.GLFW_KEY_S || keyCode == GLFW.GLFW_KEY_DOWN || keyCode == GLFW.GLFW_KEY_D || keyCode == GLFW.GLFW_KEY_RIGHT) {
+            selectedOptionIndex = moveSelection(selectedOptionIndex, options.size(), 1);
+            return true;
+        }
+
+        if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER || keyCode == GLFW.GLFW_KEY_SPACE) {
+            if (options.isEmpty()) {
+                DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, -1);
+            } else {
+                selectedOptionIndex = normalizeSelectedOption(selectedOptionIndex, options.size());
+                DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, options.get(selectedOptionIndex).originalIndex());
+            }
+            return true;
+        }
+
         if (keyCode >= 49 && keyCode <= 57) {
-            DialogueNode node = currentNode();
             int index = keyCode - 49;
-            List<OptionSlot> options = node == null ? List.of() : visibleOptions(node);
-            if (node != null && isTextComplete(node) && index < options.size()) {
+            if (index < options.size()) {
+                selectedOptionIndex = index;
                 DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, options.get(index).originalIndex());
                 return true;
             }
@@ -133,6 +168,20 @@ public class DialogueScreen extends Screen {
             }
         }
         return visible;
+    }
+
+    private int moveSelection(int current, int optionCount, int direction) {
+        if (optionCount <= 0) {
+            return 0;
+        }
+        return Math.floorMod(current + direction, optionCount);
+    }
+
+    private int normalizeSelectedOption(int current, int optionCount) {
+        if (optionCount <= 0) {
+            return 0;
+        }
+        return Mth.clamp(current, 0, optionCount - 1);
     }
 
     private void lockCameraOnSpeaker() {
