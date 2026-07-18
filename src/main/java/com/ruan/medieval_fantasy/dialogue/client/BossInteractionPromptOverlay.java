@@ -18,8 +18,10 @@ import net.minecraftforge.fml.common.Mod;
 public final class BossInteractionPromptOverlay {
 
     private static final String PROMPT_TEXT = "Botao direito - Falar";
-    private static final int BOX_WIDTH = 138;
     private static final int BOX_HEIGHT = 26;
+    private static final int ICON_WIDTH = 20;
+    private static final int CONTENT_GAP = 8;
+    private static final int HORIZONTAL_PADDING = 12;
 
     private static final IGuiOverlay OVERLAY = (gui, graphics, partialTick, screenWidth, screenHeight) -> {
         Minecraft minecraft = Minecraft.getInstance();
@@ -49,19 +51,25 @@ public final class BossInteractionPromptOverlay {
     }
 
     private static void renderPrompt(GuiGraphics graphics, Font font, int screenWidth, int screenHeight) {
-        int x = screenWidth / 2 - BOX_WIDTH / 2;
+        int textWidth = font.width(PROMPT_TEXT);
+        int contentWidth = ICON_WIDTH + CONTENT_GAP + textWidth;
+        int boxWidth = contentWidth + HORIZONTAL_PADDING * 2;
+        int x = screenWidth / 2 - boxWidth / 2;
         int y = screenHeight - 92;
 
-        graphics.fill(x, y, x + BOX_WIDTH, y + BOX_HEIGHT, 0xB5000000);
-        graphics.fill(x + 1, y + 1, x + BOX_WIDTH - 1, y + BOX_HEIGHT - 1, 0xAA21140F);
-        graphics.fill(x, y, x + BOX_WIDTH, y + 1, 0xFFE09A3D);
-        graphics.fill(x, y + BOX_HEIGHT - 1, x + BOX_WIDTH, y + BOX_HEIGHT, 0xFF4A2B16);
+        graphics.fill(x, y, x + boxWidth, y + BOX_HEIGHT, 0xB5000000);
+        graphics.fill(x + 1, y + 1, x + boxWidth - 1, y + BOX_HEIGHT - 1, 0xAA21140F);
+        graphics.fill(x, y, x + boxWidth, y + 1, 0xFFE09A3D);
+        graphics.fill(x, y + BOX_HEIGHT - 1, x + boxWidth, y + BOX_HEIGHT, 0xFF4A2B16);
 
-        int mouseX = x + 10;
+        int contentX = x + (boxWidth - contentWidth) / 2;
+        int mouseX = contentX;
         int mouseY = y + 5;
         drawMouseIcon(graphics, mouseX, mouseY);
 
-        graphics.drawString(font, PROMPT_TEXT, x + 34, y + 9, 0xFFFFDFA8, true);
+        int textX = mouseX + ICON_WIDTH + CONTENT_GAP;
+        int textY = y + (BOX_HEIGHT - font.lineHeight) / 2;
+        graphics.drawString(font, PROMPT_TEXT, textX, textY, 0xFFFFDFA8, true);
     }
 
     private static void drawMouseIcon(GuiGraphics graphics, int x, int y) {
