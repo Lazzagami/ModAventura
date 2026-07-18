@@ -456,6 +456,10 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
     }
 
     private void guardIncomingAttack(LivingEntity attacker, Entity directAttacker, boolean perfectGuard) {
+        if (deathSequenceStarted) {
+            return;
+        }
+
         if (attacker != null) {
             setTarget(attacker);
             setLastHurtByMob(attacker);
@@ -2018,6 +2022,10 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
     }
 
     private void startBossAnimation(int animation, int durationTicks) {
+        if (deathSequenceStarted && animation != ANIMATION_DEATH_KNEEL) {
+            return;
+        }
+
         entityData.set(BOSS_ANIMATION, animation);
         entityData.set(BOSS_ANIMATION_TICKS, durationTicks);
     }
