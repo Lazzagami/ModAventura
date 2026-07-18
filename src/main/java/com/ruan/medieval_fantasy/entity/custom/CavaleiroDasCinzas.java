@@ -700,7 +700,7 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         getLookControl().setLookAt(player, 40.0F, 40.0F);
         lookAt(player, 40.0F, 40.0F);
 
-        String startNode = DialogueMemory.getBoolean(player, "ash_knight_defeated") ? "skip_prompt" : "start";
+        String startNode = getIntroStartNode(player);
         DialogueManager.startDialogue(player, this, "ash_knight_intro", startNode);
     }
 
@@ -733,9 +733,19 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         if (introTicks >= 40 && target instanceof ServerPlayer player) {
             dialogueStarted = true;
             introLine = true;
-            String startNode = DialogueMemory.getBoolean(player, "ash_knight_defeated") ? "skip_prompt" : "start";
+            String startNode = getIntroStartNode(player);
             DialogueManager.startDialogue(player, this, "ash_knight_intro", startNode);
         }
+    }
+
+    private String getIntroStartNode(ServerPlayer player) {
+        if (DialogueMemory.getBoolean(player, "ash_knight_defeated")) {
+            return "skip_prompt";
+        }
+        if (DialogueMemory.getBoolean(player, "ash_knight_truce")) {
+            return "peace_revisit";
+        }
+        return "start";
     }
 
     private void tickActionSounds() {

@@ -22,6 +22,42 @@
         }
       ]
     },
+    "peace_revisit": {
+      "id": "peace_revisit",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Voce voltou ao limite do meu juramento. Uma vez eu permiti que saisse vivo. Nao transforme misericordia em erro.",
+      "animation": "sword_rest",
+      "animationTicks": 52,
+      "options": [
+        {
+          "text": "Ainda vou me retirar. Nao vim lutar.",
+          "next": "peace_revisit_leave",
+          "actions": [
+            { "type": "set_memory_string", "key": "ash_knight_peace_route", "value": "revisit_leave" }
+          ]
+        },
+        {
+          "text": "Desta vez eu preciso passar.",
+          "next": "fight_start_doubt",
+          "actions": [
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "measured" },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "doubt" },
+            { "type": "set_memory_bool", "key": "ash_knight_truce_broken", "booleanValue": true }
+          ]
+        }
+      ]
+    },
+    "peace_revisit_leave": {
+      "id": "peace_revisit_leave",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Entao va. Enquanto seus passos se afastarem do trono, minha lamina permanecera baixa.",
+      "animation": "sword_rest",
+      "animationTicks": 52,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "set_memory_bool", "key": "ash_knight_truce", "booleanValue": true }
+      ]
+    },
     "start": {
       "id": "start",
       "speaker": "Cavaleiro das Cinzas",
@@ -222,7 +258,7 @@
       "text": "Eu abri caminho para ela. Ate hoje, quando o fogo baixa, ainda escuto passos pequenos correndo para o portao. Nunca soube se chegaram.",
       "animation": "sword_rest",
       "animationTicks": 58,
-      "next": "final_respect_01"
+      "next": "peace_search_save_offer"
     },
     "search_answers_01": {
       "id": "search_answers_01",
@@ -500,7 +536,7 @@
       "text": "Se eu abrisse o portao para todos que temem a lamina, Eldrath teria queimado duas vezes. O medo nao absolve ninguem.",
       "animation": "sword_rest",
       "animationTicks": 66,
-      "next": "final_doubt_01"
+      "next": "peace_mercy_leave_offer"
     },
     "mercy_choice_01": {
       "id": "mercy_choice_01",
@@ -516,7 +552,7 @@
       "text": "Essa palavra morreu aqui antes do rei. Eu a enterrei com minhas proprias maos, sem perceber.",
       "animation": "sword_rest",
       "animationTicks": 54,
-      "next": "final_sadness_01"
+      "next": "peace_mercy_choice_offer"
     },
     "mercy_pass_01": {
       "id": "mercy_pass_01",
@@ -675,7 +711,7 @@
       "text": "Mas talvez seja isso que torna suas palavras perigosas. Elas ainda carregam futuro.",
       "animation": "sword_rest",
       "animationTicks": 54,
-      "next": "final_doubt_01"
+      "next": "peace_knight_oath_offer"
     },
     "knight_respect_post_01": {
       "id": "knight_respect_post_01",
@@ -801,7 +837,7 @@
       "text": "Mas talvez impeça vivos de chamarem ambicao de destino.",
       "animation": "sword_rest",
       "animationTicks": 58,
-      "next": "final_respect_01"
+      "next": "peace_archaeologist_truth_offer"
     },
 
     "origin_renegade_01": {
@@ -870,7 +906,7 @@
       "text": "Nao confunda reconhecer uma cela com ter a chave. Eu reconheci a minha por seculos.",
       "animation": "sword_rest",
       "animationTicks": 54,
-      "next": "final_doubt_01"
+      "next": "peace_renegade_prison_offer"
     },
     "renegade_no_law_01": {
       "id": "renegade_no_law_01",
@@ -881,6 +917,223 @@
       "actions": [
         { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
         { "type": "start_boss_fight" }
+      ]
+    },
+
+    "peace_search_save_offer": {
+      "id": "peace_search_save_offer",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Se sua busca e por vida, nao pelo trono, entao ha uma coragem que nao exige lamina. Recuar daqui tambem pode salvar alguem.",
+      "animation": "sword_rest",
+      "animationTicks": 66,
+      "options": [
+        {
+          "text": "Vou recuar. Ninguem precisa morrer hoje.",
+          "next": "peace_search_save_exit",
+          "actions": [
+            { "type": "set_memory_bool", "key": "ash_knight_truce", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_peace_route", "value": "search_save" },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "mercy" }
+          ]
+        },
+        {
+          "text": "Nao posso recuar. Ainda preciso passar.",
+          "next": "fight_start_respect",
+          "actions": [
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" }
+          ]
+        }
+      ]
+    },
+    "peace_search_save_exit": {
+      "id": "peace_search_save_exit",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Entao va. Se encontrar quem procura, diga-lhe que Eldrath ainda guarda os nomes dos que tentaram salvar, nao apenas dos que venceram.",
+      "animation": "sword_rest",
+      "animationTicks": 72,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "set_memory_bool", "key": "ash_knight_left_without_fight", "booleanValue": true }
+      ]
+    },
+    "peace_mercy_leave_offer": {
+      "id": "peace_mercy_leave_offer",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Mas se sua mao realmente nao busca esta porta, eu nao mancharei estas pedras com sangue por orgulho.",
+      "animation": "sword_rest",
+      "animationTicks": 58,
+      "options": [
+        {
+          "text": "Entao eu vou embora.",
+          "next": "peace_mercy_leave_exit",
+          "actions": [
+            { "type": "set_memory_bool", "key": "ash_knight_truce", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_peace_route", "value": "mercy_leave" },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "doubt" }
+          ]
+        },
+        {
+          "text": "Nao. Eu ainda vou atravessar.",
+          "next": "fight_start_doubt",
+          "actions": [
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "doubt" }
+          ]
+        }
+      ]
+    },
+    "peace_mercy_leave_exit": {
+      "id": "peace_mercy_leave_exit",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Caminhe de volta enquanto ainda consegue escolher a direcao dos seus passos. Poucos neste castelo receberam esse presente.",
+      "animation": "sword_rest",
+      "animationTicks": 64,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "set_memory_bool", "key": "ash_knight_left_without_fight", "booleanValue": true }
+      ]
+    },
+    "peace_mercy_choice_offer": {
+      "id": "peace_mercy_choice_offer",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Talvez escolha ainda exista se alguem a carregar por mim. Por hoje... posso abaixar a espada.",
+      "animation": "sword_rest",
+      "animationTicks": 66,
+      "options": [
+        {
+          "text": "Entao descanse. Eu nao serei mais uma guerra.",
+          "next": "peace_mercy_choice_exit",
+          "actions": [
+            { "type": "set_memory_bool", "key": "ash_knight_truce", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_peace_route", "value": "mercy_choice" },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "sadness" }
+          ]
+        },
+        {
+          "text": "Se nao puder escolher, eu abrirei caminho.",
+          "next": "fight_start_sadness",
+          "actions": [
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "sadness" }
+          ]
+        }
+      ]
+    },
+    "peace_mercy_choice_exit": {
+      "id": "peace_mercy_choice_exit",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Nao chame isso de perdao. Ainda nao mereco tanto. Chame de silencio entre duas chamas.",
+      "animation": "sword_rest",
+      "animationTicks": 64,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "set_memory_bool", "key": "ash_knight_left_without_fight", "booleanValue": true }
+      ]
+    },
+    "peace_knight_oath_offer": {
+      "id": "peace_knight_oath_offer",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Se voce entende o peso de um juramento, entao entende isto: nem todo posto precisa ser tomado pela forca.",
+      "animation": "sword_rest",
+      "animationTicks": 62,
+      "options": [
+        {
+          "text": "[Cavaleiro] Entao guardarei sua advertencia, nao sua lamina.",
+          "next": "peace_knight_oath_exit",
+          "actions": [
+            { "type": "set_memory_bool", "key": "ash_knight_truce", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_peace_route", "value": "knight_oath" },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" }
+          ]
+        },
+        {
+          "text": "[Cavaleiro] Um juramento quebrado ainda precisa ser julgado.",
+          "next": "fight_start_respect",
+          "actions": [
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" }
+          ]
+        }
+      ]
+    },
+    "peace_knight_oath_exit": {
+      "id": "peace_knight_oath_exit",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Leve-a, entao. Nao escrita em metal, mas em memoria. Que seu juramento nao se torne sua cela.",
+      "animation": "sword_rest",
+      "animationTicks": 68,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "set_memory_bool", "key": "ash_knight_left_without_fight", "booleanValue": true }
+      ]
+    },
+    "peace_archaeologist_truth_offer": {
+      "id": "peace_archaeologist_truth_offer",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Entao registre isto tambem: um reino nao morre quando suas torres caem. Morre quando ninguem mais se importa em contar por que cairam.",
+      "animation": "sword_rest",
+      "animationTicks": 70,
+      "options": [
+        {
+          "text": "[Arqueologo] Eu levarei a verdade adiante.",
+          "next": "peace_archaeologist_truth_exit",
+          "actions": [
+            { "type": "set_memory_bool", "key": "ash_knight_truce", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_peace_route", "value": "archaeologist_truth" },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" }
+          ]
+        },
+        {
+          "text": "[Arqueologo] Antes preciso ver o que voce protege.",
+          "next": "fight_start_respect",
+          "actions": [
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" }
+          ]
+        }
+      ]
+    },
+    "peace_archaeologist_truth_exit": {
+      "id": "peace_archaeologist_truth_exit",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Entao va, escriba das cinzas. Se mentir sobre Eldrath, eu saberei. Se disser a verdade... talvez algo de nos sobreviva.",
+      "animation": "sword_rest",
+      "animationTicks": 72,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "set_memory_bool", "key": "ash_knight_left_without_fight", "booleanValue": true }
+      ]
+    },
+    "peace_renegade_prison_offer": {
+      "id": "peace_renegade_prison_offer",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Voce fala sem reverencia, mas nao sem olhos. Quem reconhece uma prisao talvez saiba sair sem arrombar todas as portas.",
+      "animation": "sword_rest",
+      "animationTicks": 64,
+      "options": [
+        {
+          "text": "[Renegado] Hoje eu saio. Nada de corrente, nada de trono.",
+          "next": "peace_renegade_prison_exit",
+          "actions": [
+            { "type": "set_memory_bool", "key": "ash_knight_truce", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_peace_route", "value": "renegade_prison" },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "doubt" }
+          ]
+        },
+        {
+          "text": "[Renegado] Eu quebro portas. E voce esta na frente.",
+          "next": "fight_start_anger",
+          "actions": [
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "contempt" }
+          ]
+        }
+      ]
+    },
+    "peace_renegade_prison_exit": {
+      "id": "peace_renegade_prison_exit",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Entao suma das minhas muralhas antes que eu confunda liberdade com saque. Nao desperdice a unica porta que nao precisei fechar.",
+      "animation": "sword_rest",
+      "animationTicks": 68,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "set_memory_bool", "key": "ash_knight_left_without_fight", "booleanValue": true }
       ]
     },
 
