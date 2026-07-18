@@ -60,6 +60,9 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
 
     private enum CombatStyle {
@@ -820,11 +823,17 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
         if (source.getEntity() instanceof ServerPlayer player) {
             CombatParticipationTracker.recordDamage(this, player);
         }
-        for (ServerPlayer player : CombatParticipationTracker.getParticipants(this)) {
+
+        List<ServerPlayer> participants = new ArrayList<>(CombatParticipationTracker.getParticipants(this));
+        if (participants.isEmpty() && source.getEntity() instanceof ServerPlayer player) {
+            participants.add(player);
+        }
+
+        for (ServerPlayer player : participants) {
             DialogueMemory.setBoolean(player, "ash_knight_defeated", true);
             DialogueMemory.setBoolean(player, "ash_knight_intro_seen", true);
         }
-        PlayerExperienceManager.rewardBossKill(this, CombatParticipationTracker.getParticipants(this), "cavaleiro_das_cinzas");
+        PlayerExperienceManager.rewardBossKill(this, participants, "cavaleiro_das_cinzas");
     }
 
     public void setDialogueMode(boolean dialogueMode) {
