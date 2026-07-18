@@ -45,7 +45,7 @@ public final class DialogueRenderer {
             String optionText = (i + 1) + ". " + options.get(i).getText();
             int optionHeight = getOptionHeight(font, optionText, boxWidth);
             boolean hovered = isInside(mouseX, mouseY, x, startY - 3, boxWidth, optionHeight);
-            boolean selected = i == selectedOptionIndex;
+            boolean selected = selectedOptionIndex >= 0 && i == selectedOptionIndex;
             int color = hovered || selected ? 0xFFFFD27D : 0xFFE8DED2;
             String prefix = selected ? "> " : "  ";
             drawWordWrapShadow(graphics, font, prefix + optionText, x, startY, boxWidth, color);

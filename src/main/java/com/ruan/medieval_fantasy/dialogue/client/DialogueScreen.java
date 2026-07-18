@@ -23,7 +23,8 @@ public class DialogueScreen extends Screen {
     private String nodeId;
     private int visibleCharacters;
     private int tickCounter;
-    private int selectedOptionIndex;
+    private int selectedOptionIndex = -1;
+    private String lastRenderedNodeId = "";
 
     public DialogueScreen(DialogueTree tree, String nodeId, int speakerEntityId) {
         super(Component.literal("Dialogue"));
@@ -64,6 +65,11 @@ public class DialogueScreen extends Screen {
             return;
         }
 
+        if (!nodeId.equals(lastRenderedNodeId)) {
+            lastRenderedNodeId = nodeId;
+            selectedOptionIndex = -1;
+        }
+
         String visibleText = node.getText().substring(0, Math.min(visibleCharacters, node.getText().length()));
         List<OptionSlot> options = visibleOptions(node);
         selectedOptionIndex = normalizeSelectedOption(selectedOptionIndex, options.size());
@@ -97,7 +103,6 @@ public class DialogueScreen extends Screen {
         }
 
         if (clickedOption >= 0 && clickedOption < options.size()) {
-            selectedOptionIndex = clickedOption;
             DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, options.get(clickedOption).originalIndex());
             return true;
         }
@@ -133,6 +138,9 @@ public class DialogueScreen extends Screen {
                 DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, -1);
             } else {
                 selectedOptionIndex = normalizeSelectedOption(selectedOptionIndex, options.size());
+                if (selectedOptionIndex < 0) {
+                    selectedOptionIndex = 0;
+                }
                 DialogueNetworkHandler.choose(speakerEntityId, tree.getId(), nodeId, options.get(selectedOptionIndex).originalIndex());
             }
             return true;
@@ -172,14 +180,20 @@ public class DialogueScreen extends Screen {
 
     private int moveSelection(int current, int optionCount, int direction) {
         if (optionCount <= 0) {
-            return 0;
+            return -1;
+        }
+        if (current < 0) {
+            return direction < 0 ? optionCount - 1 : 0;
         }
         return Math.floorMod(current + direction, optionCount);
     }
 
     private int normalizeSelectedOption(int current, int optionCount) {
         if (optionCount <= 0) {
-            return 0;
+            return -1;
+        }
+        if (current < 0) {
+            return -1;
         }
         return Mth.clamp(current, 0, optionCount - 1);
     }
