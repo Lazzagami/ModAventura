@@ -12,6 +12,7 @@
         {
           "text": "Sim. Vamos lutar.",
           "actions": [
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "silent" },
             { "type": "start_boss_fight" }
           ]
         },
@@ -26,7 +27,7 @@
       "speaker": "Cavaleiro das Cinzas",
       "text": "...",
       "animation": "sword_rest",
-      "animationTicks": 50,
+      "animationTicks": 52,
       "next": "after_so_long"
     },
     "after_so_long": {
@@ -34,7 +35,7 @@
       "speaker": "Cavaleiro das Cinzas",
       "text": "Depois de tanto tempo...",
       "animation": "sword_rest",
-      "animationTicks": 45,
+      "animationTicks": 46,
       "entryActions": [
         { "type": "boss_step_sound", "volume": 0.9, "pitch": 0.62 }
       ],
@@ -57,46 +58,46 @@
       "options": [
         {
           "text": "Estou procurando alguem.",
-          "next": "looking_someone_01",
+          "next": "route_search_01",
           "actions": [
-            { "type": "set_memory_int", "key": "ash_knight_first_answer", "amount": 1 },
-            { "type": "set_memory_string", "key": "ash_knight_first_answer_text", "value": "looking_for_someone" },
-            { "type": "add_memory_int", "key": "ash_knight_compassion", "amount": 1 }
+            { "type": "set_memory_string", "key": "ash_knight_route", "value": "search" },
+            { "type": "add_memory_int", "key": "ash_knight_compassion", "amount": 1 },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "hesitant" }
           ]
         },
         {
           "text": "Quem e voce?",
-          "next": "who_are_you_01",
+          "next": "route_identity_01",
           "actions": [
-            { "type": "set_memory_int", "key": "ash_knight_first_answer", "amount": 2 },
-            { "type": "set_memory_string", "key": "ash_knight_first_answer_text", "value": "who_are_you" }
+            { "type": "set_memory_string", "key": "ash_knight_route", "value": "identity" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "measured" }
           ]
         },
         {
           "text": "O que aconteceu com este reino?",
-          "next": "kingdom_01",
+          "next": "route_history_01",
           "actions": [
-            { "type": "set_memory_int", "key": "ash_knight_first_answer", "amount": 3 },
-            { "type": "set_memory_string", "key": "ash_knight_first_answer_text", "value": "what_happened" },
-            { "type": "set_memory_bool", "key": "ash_knight_asked_about_eldrath", "booleanValue": true }
+            { "type": "set_memory_string", "key": "ash_knight_route", "value": "history" },
+            { "type": "set_memory_bool", "key": "ash_knight_asked_about_eldrath", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "mournful" }
           ]
         },
         {
           "text": "Nao quero lutar.",
-          "next": "no_fight_01",
+          "next": "route_mercy_01",
           "actions": [
-            { "type": "set_memory_int", "key": "ash_knight_first_answer", "amount": 4 },
-            { "type": "set_memory_string", "key": "ash_knight_first_answer_text", "value": "no_fight" },
-            { "type": "add_memory_int", "key": "ash_knight_mercy", "amount": 2 }
+            { "type": "set_memory_string", "key": "ash_knight_route", "value": "mercy" },
+            { "type": "add_memory_int", "key": "ash_knight_mercy", "amount": 2 },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "hesitant" }
           ]
         },
         {
           "text": "So estou de passagem.",
-          "next": "passing_01",
+          "next": "route_passing_01",
           "actions": [
-            { "type": "set_memory_int", "key": "ash_knight_first_answer", "amount": 5 },
-            { "type": "set_memory_string", "key": "ash_knight_first_answer_text", "value": "passing_through" },
-            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -1 }
+            { "type": "set_memory_string", "key": "ash_knight_route", "value": "passing" },
+            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -1 },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "dismissive" }
           ]
         },
         {
@@ -107,9 +108,11 @@
           ],
           "actions": [
             { "type": "set_memory_bool", "key": "ash_knight_used_origin_dialogue", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_route", "value": "origin_knight" },
             { "type": "set_memory_string", "key": "ash_knight_origin_dialogue", "value": "knight_crest" },
-            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": 2 },
-            { "type": "add_memory_int", "key": "ash_knight_conviction", "amount": 1 }
+            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": 3 },
+            { "type": "add_memory_int", "key": "ash_knight_conviction", "amount": 1 },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "respectful" }
           ]
         },
         {
@@ -120,8 +123,10 @@
           ],
           "actions": [
             { "type": "set_memory_bool", "key": "ash_knight_used_origin_dialogue", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_route", "value": "origin_archaeologist" },
             { "type": "set_memory_string", "key": "ash_knight_origin_dialogue", "value": "archaeologist_ash_war" },
-            { "type": "add_memory_int", "key": "ash_knight_compassion", "amount": 1 }
+            { "type": "add_memory_int", "key": "ash_knight_compassion", "amount": 2 },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "mournful" }
           ]
         },
         {
@@ -132,428 +137,482 @@
           ],
           "actions": [
             { "type": "set_memory_bool", "key": "ash_knight_used_origin_dialogue", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_route", "value": "origin_renegade" },
             { "type": "set_memory_string", "key": "ash_knight_origin_dialogue", "value": "renegade_empty_throne" },
-            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -1 },
-            { "type": "add_memory_int", "key": "ash_knight_ambition", "amount": 1 }
+            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -2 },
+            { "type": "add_memory_int", "key": "ash_knight_ambition", "amount": 1 },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "angered" }
           ]
         }
       ]
     },
 
-    "looking_someone_01": {
-      "id": "looking_someone_01",
+    "route_search_01": {
+      "id": "route_search_01",
       "speaker": "Cavaleiro das Cinzas",
       "text": "Todos procuram alguem.",
       "animation": "sword_rest",
-      "animationTicks": 38,
-      "next": "looking_someone_02"
-    },
-    "looking_someone_02": {
-      "id": "looking_someone_02",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Alguns procuram um rei. Outros procuram poder.",
-      "animation": "sword_rest",
       "animationTicks": 42,
-      "next": "looking_someone_03"
+      "next": "route_search_02"
     },
-    "looking_someone_03": {
-      "id": "looking_someone_03",
+    "route_search_02": {
+      "id": "route_search_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "No fim... todos acabam procurando o trono.",
+      "text": "Alguns procuram um rei morto. Outros procuram o homem que eram antes da chama.",
       "animation": "sword_rest",
-      "animationTicks": 45,
+      "animationTicks": 58,
+      "next": "route_search_choice"
+    },
+    "route_search_choice": {
+      "id": "route_search_choice",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Diga-me: voce procura para salvar... ou para possuir?",
+      "animation": "sword_rest",
+      "animationTicks": 46,
       "options": [
         {
-          "text": "Eu nao quero o trono.",
-          "next": "no_throne_01",
+          "text": "Para salvar.",
+          "next": "search_save_01",
           "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "does_not_want_throne" },
-            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": 1 }
+            { "type": "add_memory_int", "key": "ash_knight_mercy", "amount": 2 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "hesitant" }
           ]
         },
         {
-          "text": "E se eu quiser o trono?",
-          "next": "wants_throne_01",
+          "text": "Para obter respostas.",
+          "next": "search_answers_01",
           "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "wants_throne" },
-            { "type": "add_memory_int", "key": "ash_knight_ambition", "amount": 3 },
-            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -3 }
+            { "type": "set_memory_bool", "key": "ash_knight_revealed_missing_heir", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "doubt" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "measured" }
           ]
         },
         {
-          "text": "Quem eram os outros?",
-          "next": "others_01",
+          "text": "Se essa pessoa tiver poder, vou toma-lo.",
+          "next": "search_take_power_01",
           "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "asked_about_others" },
-            { "type": "set_memory_bool", "key": "ash_knight_asked_about_previous_challengers", "booleanValue": true }
+            { "type": "add_memory_int", "key": "ash_knight_ambition", "amount": 4 },
+            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -3 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "contempt" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "angered" }
           ]
         }
       ]
     },
-    "no_throne_01": {
-      "id": "no_throne_01",
+    "search_save_01": {
+      "id": "search_save_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Foi exatamente isso que disseram os ultimos.",
+      "text": "Salvar alguem dentro de Eldrath...",
       "animation": "sword_rest",
+      "animationTicks": 50,
+      "next": "search_save_02"
+    },
+    "search_save_02": {
+      "id": "search_save_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "A ultima pessoa que me disse isso carregava criancas pelos corredores enquanto o teto caia.",
+      "animation": "sword_rest",
+      "animationTicks": 68,
+      "next": "search_save_03"
+    },
+    "search_save_03": {
+      "id": "search_save_03",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Eu abri caminho para ela. Nunca soube se alcancou o portao.",
+      "animation": "sword_rest",
+      "animationTicks": 58,
+      "next": "final_respect_01"
+    },
+    "search_answers_01": {
+      "id": "search_answers_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Respostas sobrevivem melhor que pessoas.",
+      "animation": "sword_rest",
+      "animationTicks": 48,
+      "next": "search_answers_02"
+    },
+    "search_answers_02": {
+      "id": "search_answers_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Procure entao pelo nome apagado nas catacumbas: Aurelian. Foi por ele que o conselho traiu o rei.",
+      "animation": "sword_rest",
+      "animationTicks": 72,
+      "next": "final_doubt_01"
+    },
+    "search_take_power_01": {
+      "id": "search_take_power_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Entao voce nao procura alguem.",
+      "animation": "draw_sword",
       "animationTicks": 42,
-      "next": "no_throne_02"
+      "next": "search_take_power_02"
     },
-    "no_throne_02": {
-      "id": "no_throne_02",
+    "search_take_power_02": {
+      "id": "search_take_power_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Eles tambem mentiram.",
+      "text": "Voce procura uma desculpa.",
       "animation": "sword_rest",
       "animationTicks": 38,
-      "next": "final_question_intro"
-    },
-    "wants_throne_01": {
-      "id": "wants_throne_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Entao ja sabe como esta conversa termina.",
-      "animation": "sword_rest",
-      "animationTicks": 46,
-      "next": "final_question_intro"
-    },
-    "others_01": {
-      "id": "others_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Homens. Herois. Reis. Ladroes.",
-      "animation": "sword_rest",
-      "animationTicks": 45,
-      "next": "others_02"
-    },
-    "others_02": {
-      "id": "others_02",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Todos iguais.",
-      "animation": "sword_rest",
-      "animationTicks": 38,
-      "next": "final_question_intro"
+      "next": "final_contempt_01"
     },
 
-    "who_are_you_01": {
-      "id": "who_are_you_01",
+    "route_identity_01": {
+      "id": "route_identity_01",
       "speaker": "Cavaleiro das Cinzas",
       "text": "Eu...",
       "animation": "sword_rest",
-      "animationTicks": 48,
-      "next": "who_are_you_02"
+      "animationTicks": 52,
+      "next": "route_identity_02"
     },
-    "who_are_you_02": {
-      "id": "who_are_you_02",
+    "route_identity_02": {
+      "id": "route_identity_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Ja tive nome, posto e homens que marchavam quando eu erguia a mao.",
+      "animation": "sword_rest",
+      "animationTicks": 58,
+      "next": "route_identity_choice"
+    },
+    "route_identity_choice": {
+      "id": "route_identity_choice",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Hoje sou o que restou quando todas essas coisas queimaram.",
+      "animation": "sword_rest",
+      "animationTicks": 52,
+      "options": [
+        {
+          "text": "Diga seu nome.",
+          "next": "identity_name_01",
+          "actions": [
+            { "type": "set_memory_bool", "key": "ash_knight_learned_old_name", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "respectful" }
+          ]
+        },
+        {
+          "text": "Entao voce e apenas uma armadura vazia.",
+          "next": "identity_empty_01",
+          "actions": [
+            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -3 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "silence" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "angered" }
+          ]
+        },
+        {
+          "text": "Ainda resta alguem ai dentro?",
+          "next": "identity_someone_01",
+          "actions": [
+            { "type": "add_memory_int", "key": "ash_knight_compassion", "amount": 2 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "sadness" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "hesitant" }
+          ]
+        }
+      ]
+    },
+    "identity_name_01": {
+      "id": "identity_name_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Sir Kael Duran, comandante da guarda real de Eldrath.",
+      "animation": "sword_rest",
+      "animationTicks": 56,
+      "next": "identity_name_02"
+    },
+    "identity_name_02": {
+      "id": "identity_name_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Se esse nome ainda vale algo, leve-o como aviso. Nao como trofeu.",
+      "animation": "sword_rest",
+      "animationTicks": 56,
+      "next": "final_respect_01"
+    },
+    "identity_empty_01": {
+      "id": "identity_empty_01",
       "speaker": "Cavaleiro das Cinzas",
       "text": "...",
-      "animation": "sword_rest",
-      "animationTicks": 45,
-      "next": "who_are_you_03"
+      "animation": "draw_sword",
+      "animationTicks": 54,
+      "next": "final_silence_start"
     },
-    "who_are_you_03": {
-      "id": "who_are_you_03",
+    "identity_someone_01": {
+      "id": "identity_someone_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Ja fui chamado de muitas coisas.",
+      "text": "As vezes.",
       "animation": "sword_rest",
-      "animationTicks": 44,
-      "next": "who_are_you_04"
+      "animationTicks": 48,
+      "next": "identity_someone_02"
     },
-    "who_are_you_04": {
-      "id": "who_are_you_04",
+    "identity_someone_02": {
+      "id": "identity_someone_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Hoje... sou apenas o ultimo guardiao.",
+      "text": "Quando a chama baixa, eu lembro do peso da chuva no rosto.",
+      "animation": "sword_rest",
+      "animationTicks": 62,
+      "next": "final_sadness_01"
+    },
+
+    "route_history_01": {
+      "id": "route_history_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Eldrath nao caiu pelas espadas.",
+      "animation": "sword_rest",
+      "animationTicks": 48,
+      "next": "route_history_02"
+    },
+    "route_history_02": {
+      "id": "route_history_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "As muralhas seguraram exercitos. Nao seguraram a fome por relíquias.",
+      "animation": "sword_rest",
+      "animationTicks": 58,
+      "next": "route_history_choice"
+    },
+    "route_history_choice": {
+      "id": "route_history_choice",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Foi uma porta aberta por dentro.",
       "animation": "sword_rest",
       "animationTicks": 46,
       "options": [
         {
-          "text": "Guardiao de que?",
-          "next": "guardian_of_what",
+          "text": "Quem abriu?",
+          "next": "history_who_01",
           "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "guardian_of_what" },
-            { "type": "set_memory_bool", "key": "ash_knight_asked_guardian_of_what", "booleanValue": true }
+            { "type": "set_memory_bool", "key": "ash_knight_revealed_council_betrayal", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "doubt" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "measured" }
           ]
         },
         {
-          "text": "Voce protege o trono?",
-          "next": "protect_throne_01",
+          "text": "A culpa foi sua.",
+          "next": "history_blame_01",
           "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "protects_throne" }
+            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -2 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "sadness" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "angered" }
           ]
         },
         {
-          "text": "Voce esta sozinho?",
-          "next": "alone_01",
+          "text": "Entao as reliquias destruiram o reino.",
+          "next": "history_relics_01",
           "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "alone" },
-            { "type": "add_memory_int", "key": "ash_knight_compassion", "amount": 1 }
+            { "type": "set_memory_bool", "key": "ash_knight_revealed_relic_cost", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "respectful" }
           ]
         }
       ]
     },
-    "guardian_of_what": {
-      "id": "guardian_of_what",
+    "history_who_01": {
+      "id": "history_who_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Daquilo que jamais deveria ser tocado.",
+      "text": "O conselho. Nao com chaves. Com votos.",
       "animation": "sword_rest",
-      "animationTicks": 45,
-      "next": "final_question_intro"
+      "animationTicks": 54,
+      "next": "history_who_02"
     },
-    "protect_throne_01": {
-      "id": "protect_throne_01",
+    "history_who_02": {
+      "id": "history_who_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Eu protejo meu juramento.",
+      "text": "Eles chamaram ambicao de futuro e covardia de necessidade.",
       "animation": "sword_rest",
-      "animationTicks": 42,
-      "next": "protect_throne_02"
+      "animationTicks": 56,
+      "next": "final_doubt_01"
     },
-    "protect_throne_02": {
-      "id": "protect_throne_02",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "O trono e apenas parte dele.",
-      "animation": "sword_rest",
-      "animationTicks": 40,
-      "next": "final_question_intro"
-    },
-    "alone_01": {
-      "id": "alone_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Ha muito tempo.",
-      "animation": "sword_rest",
-      "animationTicks": 45,
-      "next": "final_question_intro"
-    },
-
-    "kingdom_01": {
-      "id": "kingdom_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Ele caiu.",
-      "animation": "sword_rest",
-      "animationTicks": 42,
-      "next": "kingdom_02"
-    },
-    "kingdom_02": {
-      "id": "kingdom_02",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Nao pelas espadas.",
-      "animation": "sword_rest",
-      "animationTicks": 38,
-      "next": "kingdom_03"
-    },
-    "kingdom_03": {
-      "id": "kingdom_03",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Mas pela ambicao.",
-      "animation": "sword_rest",
-      "animationTicks": 42,
-      "options": [
-        {
-          "text": "Quem destruiu tudo isso?",
-          "next": "destroyed_01",
-          "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "who_destroyed_eldrath" },
-            { "type": "set_memory_bool", "key": "ash_knight_spoke_about_kingdom_fall", "booleanValue": true }
-          ]
-        },
-        {
-          "text": "Voce nao conseguiu impedir?",
-          "next": "could_not_stop_01",
-          "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "could_not_stop_it" }
-          ]
-        },
-        {
-          "text": "Entao voce falhou.",
-          "next": "you_failed_01",
-          "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "you_failed" },
-            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -2 }
-          ]
-        }
-      ]
-    },
-    "destroyed_01": {
-      "id": "destroyed_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "O proprio reino.",
-      "animation": "sword_rest",
-      "animationTicks": 44,
-      "next": "final_question_intro"
-    },
-    "could_not_stop_01": {
-      "id": "could_not_stop_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Consegui.",
-      "animation": "sword_rest",
-      "animationTicks": 38,
-      "next": "could_not_stop_02"
-    },
-    "could_not_stop_02": {
-      "id": "could_not_stop_02",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Por muito tempo.",
-      "animation": "sword_rest",
-      "animationTicks": 42,
-      "next": "final_question_intro"
-    },
-    "you_failed_01": {
-      "id": "you_failed_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "...",
-      "animation": "sword_rest",
-      "animationTicks": 60,
-      "next": "you_failed_02"
-    },
-    "you_failed_02": {
-      "id": "you_failed_02",
+    "history_blame_01": {
+      "id": "history_blame_01",
       "speaker": "Cavaleiro das Cinzas",
       "text": "Sim.",
       "animation": "sword_rest",
-      "animationTicks": 45,
-      "next": "final_question_intro"
+      "animationTicks": 54,
+      "next": "history_blame_02"
+    },
+    "history_blame_02": {
+      "id": "history_blame_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Eu obedeci ao juramento quando deveria ter protegido pessoas.",
+      "animation": "sword_rest",
+      "animationTicks": 60,
+      "next": "final_sadness_01"
+    },
+    "history_relics_01": {
+      "id": "history_relics_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Nao. Elas apenas revelaram o que ja estava dentro de nos.",
+      "animation": "sword_rest",
+      "animationTicks": 58,
+      "next": "history_relics_02"
+    },
+    "history_relics_02": {
+      "id": "history_relics_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Poder nao corrompe todos da mesma forma. Ele da a cada um uma desculpa perfeita.",
+      "animation": "sword_rest",
+      "animationTicks": 70,
+      "next": "final_respect_01"
     },
 
-    "no_fight_01": {
-      "id": "no_fight_01",
+    "route_mercy_01": {
+      "id": "route_mercy_01",
       "speaker": "Cavaleiro das Cinzas",
       "text": "Nem eu.",
       "animation": "sword_rest",
-      "animationTicks": 55,
-      "next": "no_fight_02"
+      "animationTicks": 54,
+      "next": "route_mercy_02"
     },
-    "no_fight_02": {
-      "id": "no_fight_02",
+    "route_mercy_02": {
+      "id": "route_mercy_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Mas voce entrou.",
+      "text": "Mas ha diferenca entre nao querer lutar e estar disposto a recuar.",
       "animation": "sword_rest",
-      "animationTicks": 42,
+      "animationTicks": 58,
       "options": [
         {
-          "text": "Entao me deixe passar.",
-          "next": "let_me_pass_01",
+          "text": "Entao me deixe sair.",
+          "next": "mercy_leave_01",
           "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "let_me_pass" }
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "doubt" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "hesitant" }
           ]
         },
         {
-          "text": "Voce tem escolha.",
-          "next": "you_have_choice_01",
+          "text": "Voce ainda pode escolher.",
+          "next": "mercy_choice_01",
           "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "you_have_choice" },
-            { "type": "add_memory_int", "key": "ash_knight_mercy", "amount": 1 }
+            { "type": "add_memory_int", "key": "ash_knight_mercy", "amount": 2 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "sadness" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "hesitant" }
           ]
         },
         {
-          "text": "Voce ainda e humano.",
-          "next": "still_human_01",
+          "text": "Eu passarei sem matar voce.",
+          "next": "mercy_pass_01",
           "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "still_human" },
-            { "type": "add_memory_int", "key": "ash_knight_compassion", "amount": 2 }
+            { "type": "add_memory_int", "key": "ash_knight_conviction", "amount": 2 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "respectful" }
           ]
         }
       ]
     },
-    "let_me_pass_01": {
-      "id": "let_me_pass_01",
+    "mercy_leave_01": {
+      "id": "mercy_leave_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Nao posso.",
+      "text": "Se eu abrisse o portao para todos que temem a lamina, Eldrath teria queimado duas vezes.",
       "animation": "sword_rest",
-      "animationTicks": 42,
-      "next": "final_question_intro"
+      "animationTicks": 66,
+      "next": "final_doubt_01"
     },
-    "you_have_choice_01": {
-      "id": "you_have_choice_01",
+    "mercy_choice_01": {
+      "id": "mercy_choice_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Perdi esse direito ha muitos seculos.",
+      "text": "Escolha...",
       "animation": "sword_rest",
       "animationTicks": 48,
-      "next": "final_question_intro"
+      "next": "mercy_choice_02"
     },
-    "still_human_01": {
-      "id": "still_human_01",
+    "mercy_choice_02": {
+      "id": "mercy_choice_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "...",
+      "text": "Essa palavra morreu aqui antes do rei.",
       "animation": "sword_rest",
-      "animationTicks": 52,
-      "next": "still_human_02"
+      "animationTicks": 54,
+      "next": "final_sadness_01"
     },
-    "still_human_02": {
-      "id": "still_human_02",
+    "mercy_pass_01": {
+      "id": "mercy_pass_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Nao sei.",
+      "text": "Muitos juraram vencer sem odio.",
       "animation": "sword_rest",
-      "animationTicks": 45,
-      "next": "final_question_intro"
+      "animationTicks": 50,
+      "next": "mercy_pass_02"
+    },
+    "mercy_pass_02": {
+      "id": "mercy_pass_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Poucos mantiveram a mao firme quando sangraram.",
+      "animation": "sword_rest",
+      "animationTicks": 54,
+      "next": "final_respect_01"
     },
 
-    "passing_01": {
-      "id": "passing_01",
+    "route_passing_01": {
+      "id": "route_passing_01",
       "speaker": "Cavaleiro das Cinzas",
       "text": "De passagem...",
       "animation": "sword_rest",
-      "animationTicks": 44,
-      "next": "passing_02"
+      "animationTicks": 42,
+      "next": "route_passing_02"
     },
-    "passing_02": {
-      "id": "passing_02",
+    "route_passing_02": {
+      "id": "route_passing_02",
       "speaker": "Cavaleiro das Cinzas",
       "text": "Foi exatamente assim que tudo comecou.",
       "animation": "sword_rest",
-      "animationTicks": 46,
+      "animationTicks": 48,
       "options": [
         {
           "text": "Voce nao acredita em ninguem?",
-          "next": "believed_once_01",
+          "next": "passing_trust_01",
           "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "trust_no_one" },
-            { "type": "add_memory_int", "key": "ash_knight_compassion", "amount": 1 }
+            { "type": "add_memory_int", "key": "ash_knight_compassion", "amount": 1 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "sadness" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "measured" }
           ]
         },
         {
           "text": "Voce enlouqueceu.",
-          "next": "mad_01",
+          "next": "passing_mad_01",
           "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "mad" },
-            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -2 }
+            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -2 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "contempt" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "angered" }
           ]
         },
         {
-          "text": "Entao mate qualquer um que entrar.",
-          "next": "kill_anyone_01",
+          "text": "Entao saia do caminho.",
+          "next": "passing_move_01",
           "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_branch_answer", "value": "kill_anyone" },
-            { "type": "add_memory_int", "key": "ash_knight_ambition", "amount": 1 }
+            { "type": "add_memory_int", "key": "ash_knight_ambition", "amount": 2 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "silence" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "immediate" }
           ]
         }
       ]
     },
-    "believed_once_01": {
-      "id": "believed_once_01",
+    "passing_trust_01": {
+      "id": "passing_trust_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Eu acreditava.",
+      "text": "Eu acreditava. Isso me tornou lento quando precisei ser cruel.",
       "animation": "sword_rest",
-      "animationTicks": 46,
-      "next": "final_question_intro"
+      "animationTicks": 58,
+      "next": "final_sadness_01"
     },
-    "mad_01": {
-      "id": "mad_01",
+    "passing_mad_01": {
+      "id": "passing_mad_01",
       "speaker": "Cavaleiro das Cinzas",
       "text": "Talvez.",
       "animation": "sword_rest",
       "animationTicks": 42,
-      "next": "mad_02"
+      "next": "passing_mad_02"
     },
-    "mad_02": {
-      "id": "mad_02",
+    "passing_mad_02": {
+      "id": "passing_mad_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Mas continuo vivo.",
-      "animation": "sword_rest",
-      "animationTicks": 44,
-      "next": "final_question_intro"
+      "text": "Mas minha loucura ainda reconhece arrogancia.",
+      "animation": "draw_sword",
+      "animationTicks": 48,
+      "next": "final_contempt_01"
     },
-    "kill_anyone_01": {
-      "id": "kill_anyone_01",
+    "passing_move_01": {
+      "id": "passing_move_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "E exatamente isso que faco.",
-      "animation": "sword_rest",
-      "animationTicks": 44,
-      "next": "final_question_intro"
+      "text": "",
+      "animation": "draw_sword",
+      "animationTicks": 40,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "start_boss_fight" }
+      ]
     },
 
     "origin_knight_01": {
@@ -561,23 +620,102 @@
       "speaker": "Cavaleiro das Cinzas",
       "text": "Entao ainda existem olhos capazes de ler um juramento antigo.",
       "animation": "sword_rest",
-      "animationTicks": 50,
+      "animationTicks": 52,
       "next": "origin_knight_02"
     },
     "origin_knight_02": {
       "id": "origin_knight_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Mas conhecer um brasao nao significa carregar seu peso.",
+      "text": "Aproxime-se, entao, como alguem que entende o peso de uma palavra dada.",
+      "animation": "sword_rest",
+      "animationTicks": 58,
+      "options": [
+        {
+          "text": "[Cavaleiro] Um juramento sem povo vira prisao.",
+          "next": "knight_oath_prison_01",
+          "actions": [
+            { "type": "add_memory_int", "key": "ash_knight_mercy", "amount": 2 },
+            { "type": "set_memory_bool", "key": "ash_knight_challenged_oath", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "doubt" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "hesitant" }
+          ]
+        },
+        {
+          "text": "[Cavaleiro] Seu posto ainda merece respeito.",
+          "next": "knight_respect_post_01",
+          "actions": [
+            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": 2 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "respectful" }
+          ]
+        },
+        {
+          "text": "[Cavaleiro] Se voce guarda uma reliquia maldita, eu devo tomar seu lugar.",
+          "next": "knight_take_post_01",
+          "actions": [
+            { "type": "add_memory_int", "key": "ash_knight_conviction", "amount": 3 },
+            { "type": "add_memory_int", "key": "ash_knight_ambition", "amount": 1 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "duel" }
+          ]
+        }
+      ]
+    },
+    "knight_oath_prison_01": {
+      "id": "knight_oath_prison_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Voce fala como alguem que ainda pode dormir.",
+      "animation": "sword_rest",
+      "animationTicks": 50,
+      "next": "knight_oath_prison_02"
+    },
+    "knight_oath_prison_02": {
+      "id": "knight_oath_prison_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Mas talvez seja isso que torna suas palavras perigosas.",
+      "animation": "sword_rest",
+      "animationTicks": 54,
+      "next": "final_doubt_01"
+    },
+    "knight_respect_post_01": {
+      "id": "knight_respect_post_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Respeito e uma moeda rara em ruinas.",
+      "animation": "sword_rest",
+      "animationTicks": 50,
+      "next": "knight_respect_post_02"
+    },
+    "knight_respect_post_02": {
+      "id": "knight_respect_post_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Guarde-a. Na luta, voce precisara de algo mais pesado.",
+      "animation": "sword_rest",
+      "animationTicks": 54,
+      "next": "final_respect_01"
+    },
+    "knight_take_post_01": {
+      "id": "knight_take_post_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Tomar meu lugar...",
       "animation": "sword_rest",
       "animationTicks": 48,
-      "next": "final_question_intro"
+      "next": "knight_take_post_02"
     },
+    "knight_take_post_02": {
+      "id": "knight_take_post_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Entao prove que seu juramento nao quebrara antes dos seus ossos.",
+      "animation": "draw_sword",
+      "animationTicks": 54,
+      "next": "final_respect_01"
+    },
+
     "origin_archaeologist_01": {
       "id": "origin_archaeologist_01",
       "speaker": "Cavaleiro das Cinzas",
       "text": "Guerra das Cinzas...",
       "animation": "sword_rest",
-      "animationTicks": 55,
+      "animationTicks": 56,
       "next": "origin_archaeologist_02"
     },
     "origin_archaeologist_02": {
@@ -585,274 +723,289 @@
       "speaker": "Cavaleiro das Cinzas",
       "text": "Voces deram nome ao nosso fim para que ele coubesse em livros.",
       "animation": "sword_rest",
-      "animationTicks": 52,
-      "next": "final_question_intro"
+      "animationTicks": 58,
+      "options": [
+        {
+          "text": "[Arqueologo] Os registros dizem que o rei mandou destruir a lamina.",
+          "next": "archaeologist_records_01",
+          "actions": [
+            { "type": "set_memory_bool", "key": "ash_knight_revealed_king_order", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "sadness" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "mournful" }
+          ]
+        },
+        {
+          "text": "[Arqueologo] A queda comecou antes da guerra.",
+          "next": "archaeologist_before_war_01",
+          "actions": [
+            { "type": "set_memory_bool", "key": "ash_knight_revealed_prewar_decay", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "doubt" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "measured" }
+          ]
+        },
+        {
+          "text": "[Arqueologo] Entao deixe-me registrar a verdade.",
+          "next": "archaeologist_truth_01",
+          "actions": [
+            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": 2 },
+            { "type": "set_memory_bool", "key": "ash_knight_promised_record_truth", "booleanValue": true },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "respectful" }
+          ]
+        }
+      ]
     },
+    "archaeologist_records_01": {
+      "id": "archaeologist_records_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Ele mandou.",
+      "animation": "sword_rest",
+      "animationTicks": 44,
+      "next": "archaeologist_records_02"
+    },
+    "archaeologist_records_02": {
+      "id": "archaeologist_records_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "E eu desobedeci. A primeira vez em minha vida... tarde demais.",
+      "animation": "sword_rest",
+      "animationTicks": 62,
+      "next": "final_sadness_01"
+    },
+    "archaeologist_before_war_01": {
+      "id": "archaeologist_before_war_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Voce leu as rachaduras antes de olhar para as chamas.",
+      "animation": "sword_rest",
+      "animationTicks": 54,
+      "next": "archaeologist_before_war_02"
+    },
+    "archaeologist_before_war_02": {
+      "id": "archaeologist_before_war_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Sim. Eldrath apodreceu enquanto suas bandeiras ainda brilhavam.",
+      "animation": "sword_rest",
+      "animationTicks": 60,
+      "next": "final_doubt_01"
+    },
+    "archaeologist_truth_01": {
+      "id": "archaeologist_truth_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "A verdade nao devolve mortos.",
+      "animation": "sword_rest",
+      "animationTicks": 46,
+      "next": "archaeologist_truth_02"
+    },
+    "archaeologist_truth_02": {
+      "id": "archaeologist_truth_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Mas talvez impeça vivos de chamarem ambicao de destino.",
+      "animation": "sword_rest",
+      "animationTicks": 58,
+      "next": "final_respect_01"
+    },
+
     "origin_renegade_01": {
       "id": "origin_renegade_01",
       "speaker": "Cavaleiro das Cinzas",
       "text": "Vazio?",
       "animation": "sword_rest",
-      "animationTicks": 45,
+      "animationTicks": 44,
       "next": "origin_renegade_02"
     },
     "origin_renegade_02": {
       "id": "origin_renegade_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Um trono vazio ainda atrai os piores tipos de homens.",
+      "text": "Um trono vazio ainda atrai os piores tipos de gente.",
       "animation": "sword_rest",
-      "animationTicks": 50,
-      "next": "final_question_intro"
-    },
-
-    "final_question_intro": {
-      "id": "final_question_intro",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Responda apenas uma coisa.",
-      "animation": "turn_to_player",
-      "animationTicks": 50,
-      "next": "final_question_01"
-    },
-    "final_question_01": {
-      "id": "final_question_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Se eu abrir caminho...",
-      "animation": "sword_rest",
-      "animationTicks": 45,
-      "next": "final_question_02"
-    },
-    "final_question_02": {
-      "id": "final_question_02",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "O que voce fara quando estiver diante do trono?",
-      "animation": "sword_rest",
-      "animationTicks": 46,
+      "animationTicks": 52,
       "options": [
         {
-          "text": "Vou destrui-lo.",
-          "next": "destroy_throne_01",
+          "text": "[Renegado] Pelo menos eu nao finjo que e honra.",
+          "next": "renegade_no_pretend_01",
           "actions": [
-            { "type": "set_memory_int", "key": "ash_knight_final_answer", "amount": 1 },
-            { "type": "set_memory_string", "key": "ash_knight_final_answer_text", "value": "destroy_throne" },
-            { "type": "add_memory_int", "key": "ash_knight_conviction", "amount": 2 }
+            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -1 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "contempt" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "angered" }
           ]
         },
         {
-          "text": "Vou ocupa-lo.",
-          "next": "claim_throne_01",
+          "text": "[Renegado] Eu conheco prisao quando vejo uma.",
+          "next": "renegade_prison_01",
           "actions": [
-            { "type": "set_memory_int", "key": "ash_knight_final_answer", "amount": 2 },
-            { "type": "set_memory_string", "key": "ash_knight_final_answer_text", "value": "claim_throne" },
-            { "type": "add_memory_int", "key": "ash_knight_ambition", "amount": 5 },
-            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -5 }
+            { "type": "add_memory_int", "key": "ash_knight_mercy", "amount": 1 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "doubt" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "hesitant" }
           ]
         },
         {
-          "text": "Ainda nao sei.",
-          "next": "dont_know_01",
+          "text": "[Renegado] Se o trono esta vazio, ninguem manda aqui.",
+          "next": "renegade_no_law_01",
           "actions": [
-            { "type": "set_memory_int", "key": "ash_knight_final_answer", "amount": 3 },
-            { "type": "set_memory_string", "key": "ash_knight_final_answer_text", "value": "does_not_know" }
-          ]
-        },
-        {
-          "text": "Isso nao e da sua conta.",
-          "next": "not_your_business_01",
-          "actions": [
-            { "type": "set_memory_int", "key": "ash_knight_final_answer", "amount": 4 },
-            { "type": "set_memory_string", "key": "ash_knight_final_answer_text", "value": "not_your_business" },
-            { "type": "add_memory_int", "key": "ash_knight_trust", "amount": -2 }
-          ]
-        },
-        {
-          "text": "Quero acabar com a corrupcao.",
-          "next": "end_corruption_01",
-          "actions": [
-            { "type": "set_memory_int", "key": "ash_knight_final_answer", "amount": 5 },
-            { "type": "set_memory_string", "key": "ash_knight_final_answer_text", "value": "end_corruption" },
-            { "type": "add_memory_int", "key": "ash_knight_compassion", "amount": 2 }
+            { "type": "add_memory_int", "key": "ash_knight_ambition", "amount": 4 },
+            { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "silence" },
+            { "type": "set_memory_string", "key": "ash_knight_opening_style", "value": "immediate" }
           ]
         }
       ]
     },
-    "destroy_throne_01": {
-      "id": "destroy_throne_01",
+    "renegade_no_pretend_01": {
+      "id": "renegade_no_pretend_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Nao.",
-      "animation": "sword_rest",
-      "animationTicks": 50,
-      "next": "destroy_throne_02"
-    },
-    "destroy_throne_02": {
-      "id": "destroy_throne_02",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Ele pertence a este reino. Mesmo que nao reste mais ninguem.",
-      "animation": "sword_rest",
-      "animationTicks": 50,
-      "next": "last_sequence_01"
-    },
-    "claim_throne_01": {
-      "id": "claim_throne_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Mais um rei.",
+      "text": "Honestidade sem honra ainda e so faca no escuro.",
       "animation": "draw_sword",
-      "animationTicks": 46,
-      "next": "claim_throne_02"
+      "animationTicks": 48,
+      "next": "final_contempt_01"
     },
-    "claim_throne_02": {
-      "id": "claim_throne_02",
+    "renegade_prison_01": {
+      "id": "renegade_prison_01",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Mais um tirano.",
+      "text": "Entao voce tambem conhece correntes sem metal.",
       "animation": "sword_rest",
+      "animationTicks": 54,
+      "next": "renegade_prison_02"
+    },
+    "renegade_prison_02": {
+      "id": "renegade_prison_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Nao confunda reconhecer uma cela com ter a chave.",
+      "animation": "sword_rest",
+      "animationTicks": 54,
+      "next": "final_doubt_01"
+    },
+    "renegade_no_law_01": {
+      "id": "renegade_no_law_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "",
+      "animation": "draw_sword",
+      "animationTicks": 40,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "start_boss_fight" }
+      ]
+    },
+
+    "final_respect_01": {
+      "id": "final_respect_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Voce fala como alguem que ainda pesa as proprias palavras.",
+      "animation": "sword_rest",
+      "animationTicks": 54,
+      "next": "final_respect_02"
+    },
+    "final_respect_02": {
+      "id": "final_respect_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Entao eu lhe darei algo raro neste castelo: respeito antes da lamina.",
+      "animation": "draw_sword",
+      "animationTicks": 58,
+      "next": "fight_start_respect"
+    },
+    "final_doubt_01": {
+      "id": "final_doubt_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Ha rachaduras em sua certeza.",
+      "animation": "sword_rest",
+      "animationTicks": 50,
+      "next": "final_doubt_02"
+    },
+    "final_doubt_02": {
+      "id": "final_doubt_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Talvez isso o salve. Talvez seja por elas que o fogo entrara.",
+      "animation": "sword_rest",
+      "animationTicks": 58,
+      "next": "fight_start_doubt"
+    },
+    "final_sadness_01": {
+      "id": "final_sadness_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Por um instante, quase lembro como era ouvir alguem sem procurar ameaça.",
+      "animation": "sword_rest",
+      "animationTicks": 66,
+      "next": "final_sadness_02"
+    },
+    "final_sadness_02": {
+      "id": "final_sadness_02",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Esse instante acabou.",
+      "animation": "draw_sword",
+      "animationTicks": 52,
+      "next": "fight_start_sadness"
+    },
+    "final_contempt_01": {
+      "id": "final_contempt_01",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Ja ouvi bastante.",
+      "animation": "draw_sword",
       "animationTicks": 42,
-      "next": "claim_throne_03"
+      "next": "final_contempt_02"
     },
-    "claim_throne_03": {
-      "id": "claim_throne_03",
+    "final_contempt_02": {
+      "id": "final_contempt_02",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Mais um cadaver.",
-      "animation": "sword_rest",
-      "animationTicks": 44,
-      "next": "last_sequence_01"
-    },
-    "dont_know_01": {
-      "id": "dont_know_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Foi assim que comecou com todos os outros.",
+      "text": "Que suas ultimas palavras sejam melhores que estas.",
       "animation": "sword_rest",
       "animationTicks": 46,
-      "next": "dont_know_02"
+      "next": "fight_start_anger"
     },
-    "dont_know_02": {
-      "id": "dont_know_02",
+    "final_silence_start": {
+      "id": "final_silence_start",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "A duvida sempre encontra um dono.",
-      "animation": "sword_rest",
-      "animationTicks": 46,
-      "next": "last_sequence_01"
-    },
-    "not_your_business_01": {
-      "id": "not_your_business_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Enquanto estiver diante de mim...",
-      "animation": "sword_rest",
-      "animationTicks": 46,
-      "next": "not_your_business_02"
-    },
-    "not_your_business_02": {
-      "id": "not_your_business_02",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "E da minha conta.",
-      "animation": "sword_rest",
-      "animationTicks": 44,
-      "next": "last_sequence_01"
-    },
-    "end_corruption_01": {
-      "id": "end_corruption_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Pela forca?",
-      "animation": "sword_rest",
-      "animationTicks": 45,
-      "options": [
-        {
-          "text": "Se for necessario.",
-          "next": "force_needed_01",
-          "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_corruption_answer", "value": "force_if_needed" },
-            { "type": "add_memory_int", "key": "ash_knight_conviction", "amount": 2 },
-            { "type": "add_memory_int", "key": "ash_knight_ambition", "amount": 1 }
-          ]
-        },
-        {
-          "text": "Existe outro caminho.",
-          "next": "another_way_01",
-          "actions": [
-            { "type": "set_memory_string", "key": "ash_knight_corruption_answer", "value": "another_way" },
-            { "type": "add_memory_int", "key": "ash_knight_mercy", "amount": 3 },
-            { "type": "add_memory_int", "key": "ash_knight_compassion", "amount": 2 }
-          ]
-        }
+      "text": "",
+      "animation": "draw_sword",
+      "animationTicks": 36,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "start_boss_fight" }
       ]
     },
-    "force_needed_01": {
-      "id": "force_needed_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Entao voce ja comecou a se parecer com eles.",
-      "animation": "sword_rest",
-      "animationTicks": 48,
-      "next": "last_sequence_01"
-    },
-    "another_way_01": {
-      "id": "another_way_01",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "...",
-      "animation": "sword_rest",
-      "animationTicks": 65,
-      "next": "another_way_02"
-    },
-    "another_way_02": {
-      "id": "another_way_02",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Eu tambem acreditava nisso.",
-      "animation": "sword_rest",
-      "animationTicks": 50,
-      "next": "last_sequence_01"
-    },
 
-    "last_sequence_01": {
-      "id": "last_sequence_01",
+    "fight_start_respect": {
+      "id": "fight_start_respect",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Seu coracao ainda nao foi corrompido.",
-      "animation": "sword_rest",
-      "animationTicks": 48,
-      "next": "last_sequence_02"
-    },
-    "last_sequence_02": {
-      "id": "last_sequence_02",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Mas eu nao posso correr esse risco.",
-      "animation": "sword_rest",
-      "animationTicks": 46,
-      "next": "last_sequence_03"
-    },
-    "last_sequence_03": {
-      "id": "last_sequence_03",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Meu juramento nao permite.",
-      "animation": "sword_rest",
-      "animationTicks": 46,
-      "next": "last_sequence_04"
-    },
-    "last_sequence_04": {
-      "id": "last_sequence_04",
-      "speaker": "Cavaleiro das Cinzas",
-      "text": "Mostre-me.",
+      "text": "Mostre-me se sua conviccao pesa mais que a minha.",
       "animation": "draw_sword",
-      "animationTicks": 46,
-      "next": "last_sequence_05"
+      "animationTicks": 50,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "respect" },
+        { "type": "start_boss_fight" }
+      ]
     },
-    "last_sequence_05": {
-      "id": "last_sequence_05",
+    "fight_start_doubt": {
+      "id": "fight_start_doubt",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "Se sua conviccao e mais forte...",
+      "text": "Venha. A duvida tambem precisa ser testada.",
       "animation": "sword_rest",
       "animationTicks": 46,
-      "next": "last_sequence_06"
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "doubt" },
+        { "type": "start_boss_fight" }
+      ]
     },
-    "last_sequence_06": {
-      "id": "last_sequence_06",
+    "fight_start_sadness": {
+      "id": "fight_start_sadness",
       "speaker": "Cavaleiro das Cinzas",
-      "text": "...que a minha.",
+      "text": "Perdoe-me, se ainda existe alguem capaz disso.",
       "animation": "draw_sword",
-      "animationTicks": 46,
-      "options": [
-        {
-          "text": "Comecar luta.",
-          "actions": [
-            { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
-            { "type": "start_boss_fight" }
-          ]
-        }
+      "animationTicks": 50,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "sadness" },
+        { "type": "start_boss_fight" }
+      ]
+    },
+    "fight_start_anger": {
+      "id": "fight_start_anger",
+      "speaker": "Cavaleiro das Cinzas",
+      "text": "Chega.",
+      "animation": "draw_sword",
+      "animationTicks": 34,
+      "actions": [
+        { "type": "set_memory_bool", "key": "ash_knight_intro_seen", "booleanValue": true },
+        { "type": "set_memory_string", "key": "ash_knight_final_tone", "value": "contempt" },
+        { "type": "start_boss_fight" }
       ]
     }
   }

@@ -865,9 +865,70 @@ public class CavaleiroDasCinzas extends Zombie implements GeoEntity {
             getLookControl().setLookAt(player, 45.0F, 45.0F);
             lookAt(player, 45.0F, 45.0F);
         }
+        applyDialogueCombatOpening(player);
         if (getBossAnimation() == ANIMATION_IDLE) {
             playSwordDrawSound();
             startBossAnimation(ANIMATION_DRAW_SWORD, 42);
+        }
+    }
+
+    private void applyDialogueCombatOpening(ServerPlayer player) {
+        if (player == null) {
+            return;
+        }
+
+        String opening = DialogueMemory.getString(player, "ash_knight_opening_style");
+        String tone = DialogueMemory.getString(player, "ash_knight_final_tone");
+        if (opening.isBlank()) {
+            opening = tone;
+        }
+
+        switch (opening) {
+            case "respectful", "duel" -> {
+                combatStyle = CombatStyle.DUELIST;
+                confidence = clampConfidence(55);
+                basicAttackCooldown = 18;
+                chargeCooldown = Math.max(chargeCooldown, 70);
+                circularSlashCooldown = Math.min(circularSlashCooldown, 65);
+                flameLeapCooldown = Math.max(flameLeapCooldown, 120);
+            }
+            case "angered", "immediate", "contempt" -> {
+                combatStyle = CombatStyle.EXECUTOR;
+                confidence = clampConfidence(74);
+                basicAttackCooldown = 4;
+                combatRecoveryTicks = 2;
+                chargeCooldown = 0;
+                circularSlashCooldown = Math.min(circularSlashCooldown, 45);
+                flameLeapCooldown = Math.min(flameLeapCooldown, 95);
+                aggressionMemory += 35;
+                passivePressureTicks += 20 * 8;
+            }
+            case "hesitant", "doubt" -> {
+                combatStyle = CombatStyle.GUARDIAN;
+                confidence = clampConfidence(36);
+                basicAttackCooldown = 24;
+                combatRecoveryTicks = 16;
+                chargeCooldown = Math.max(chargeCooldown, 110);
+                circularSlashCooldown = Math.max(circularSlashCooldown, 95);
+                observationTicks = Math.max(observationTicks, 18);
+            }
+            case "mournful", "sadness" -> {
+                combatStyle = CombatStyle.GUARDIAN;
+                confidence = clampConfidence(42);
+                basicAttackCooldown = 20;
+                combatRecoveryTicks = 12;
+                chargeCooldown = Math.max(chargeCooldown, 95);
+                flameLeapCooldown = Math.min(flameLeapCooldown, 75);
+                tacticalPauseTicks = Math.max(tacticalPauseTicks, 12);
+            }
+            case "silent" -> {
+                combatStyle = CombatStyle.STUDYING;
+                confidence = clampConfidence(50);
+                basicAttackCooldown = 8;
+                combatRecoveryTicks = 4;
+            }
+            default -> {
+            }
         }
     }
 
